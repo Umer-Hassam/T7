@@ -1,0 +1,265 @@
+<% if move == nil %>
+	<% return %>
+<% end %>
+
+<% currMove = move %>
+<% inputArray = [currMove] %>
+<% while currMove.parent != nil %>
+	<% currMove = currMove.parent %>
+	<% inputArray << currMove %>
+<% end %>
+
+<% if defined?(size) and size == "mini" %>
+
+	<span class="move_container" style="display: inline-block; padding: 0px 10px;margin:0px;background: #EEF;">
+		<div class="indicator" style="width: 6px;height: 6px;border-radius: 3px;float: left;margin-top: 11px;margin-right: 3px; background:
+		<% if move.is_grab? %>
+			#fcc0fb
+		<% elsif move.on_block.to_i > -10 %>
+			#FFF; //d8f2df
+		<% elsif move.on_block.to_i >= -14 %>
+			#f7eaa6
+		<% elsif move.on_block.to_i < -14 %>
+			#f5837f
+		<% else %>
+			#FFF
+		<% end %>
+		;">
+			
+		</div>
+		<div class="container" style="float:left">
+			<%- if move.stance != nil %>
+				<span style="display: inline-block;vertical-align: middle;"><%= move.stance.name %></span>
+			<% end %>
+			<span style="display: inline-block;vertical-align: middle;margin-top: 5px;">
+				<%= render 'components/inputView', message: inputArray.map{|m|m.input}.reverse.join(","), size:20 %>
+			</span>
+		</div>
+	</span>
+	
+<% else %>
+	<div class="mcr move_container hide_with" to_toggle="hideable_<%= move.id %>" input="<%= inputArray.reverse.map { |m| m.input }.join(",").delete(' ') %>" style="
+		border-left: 3px solid
+		<% if move.is_grab? %>
+			#fcc0fb
+		<% elsif move.on_block.to_i > -10 %>
+			#FFF; //d8f2df
+		<% elsif move.on_block.to_i >= -14 %>
+			#f7eaa6
+		<% elsif move.on_block.to_i < -14 %>
+			#f5837f
+		<% else %>
+			#FFF
+		<% end %>
+		;">
+		<div class="click_to_expand_msg">click to show/hide more values</div>
+		<div class="move_row">
+			<div class="move_col move_title">
+				<%= link_to move.name, move %>
+			</div>
+			<div class="move_col admin_options">
+				<div style="float:left">
+					<%= link_to 'Edit', edit_move_path(move) %> | 
+					<%= link_to 'Copy', new_move_path({:copy_from=>move.id, :char_id=>move.character.id}) %> | 
+				</div>
+				<div style="float:left;color:red"> 
+					( <%= link_to 'Destroy', move, method: :delete, data: { confirm: 'Are you sure?' } %> ) 
+				</div>
+				<div style="float:left"> 
+					| <%= link_to 'Add Extension', new_move_path(:char_id => move.character.id, :parent_move_id => move.id) %> 
+				</div>
+				
+				<div class="clr"></div>
+			</div>
+
+			<div class="move_col move_purposes">
+
+				<% move.purposes.each do |p| %>
+					<span style="font-weight: bold;font-size: 12px;color:<%= p.desc == nil ? "black" : p.desc %>">
+						<%= p.name %>
+					</span>,
+				<% end %>
+			
+			</div>
+			<% if move.counter != nil && move.counter != "" %>
+			<div class="move_col">
+				<% if move.is_grab? %>
+					<b>Break with:</b>
+					<%= move.counter %>
+				<% end %>
+			</div>
+			<% end %>
+			<div class="move_col move_properties">
+			
+				<% move.properties.each do |p| %>
+					<span style="font-weight: bold; 
+								font-size: 12px; 
+								color: white; 
+								padding: 3px 12px; 
+								background: <%= p.description == "" ? "black" : p.description %>; 
+								border-radius: 6px;
+								margin: 0px 2px;
+								box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.2);">
+						<%= p.name %>
+					</span>
+				<% end %>
+
+			</div>
+			<div class="clr"></div>
+		</div>
+		
+		<div class="move_row">
+			<!-- This column holds the titles of properties and stance name -->
+			<div class="move_col">
+					<div class="move_row" style="line-height: 30px;width:120px">
+						<%= move.stance.name %>
+					</div>
+					<div class="move_row" style="line-height: 26px">
+						x
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						Hit Damage
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						CH Damage
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						Startup
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						On Block
+						<span class="property_jails"><%= move.jails_on_block? ? "(Jails)" : ""  %></span>
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						On Hit
+						<span class="property_jails"><%= move.jails_on_hit? ? "(Jails)" : ""  %></span>
+					</div>
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+						On Counter Hit
+						<span  class="property_jails"><%= move.jails_on_counter_hit? ? "(Jails)" : ""  %></span>
+					</div>
+			</div>
+			<!-- This column loops through all the values and create columns for each input -->
+			<div class="move_col">
+				<%- inputArray.reverse.each do |input| %>
+					<div class="move_col">
+						<!-- Move Input -->
+						<div class="move_row">
+							<%= render 'components/inputView', message: input.input %>
+						</div>
+						
+						<!-- Hit Level -->
+						<div class="move_row">
+
+							<% hl = input.hit_level %>
+							<% if hl == 'm' || hl == 'M' %>
+								<% hl = 'Mid' %>
+							<% elsif hl == 'l' || hl == 'L' %>
+								<% hl = 'Low' %>
+							<% elsif hl == 'h' || hl == 'H' %>
+								<% hl = 'High' %>
+							<% end %>
+						
+							<div class="hit_level_container" style=" background: <%= hl == "High" ? "#E9C" : hl == "Mid" ? "#f2e48a" : "#6CF" %>; "> 
+							
+								<%= hl %>
+
+							</div>
+						
+						</div>
+						
+						<!-- Hit Damage -->
+						<div class="move_row hideable_<%= move.id %> hidden">
+							<%= input.hit_damage == "" ? "x" : input.hit_damage %>
+						</div>
+						
+						<!-- Counter Hit Damage -->
+						<div class="move_row hideable_<%= move.id %>">
+							<%= input.conter_hit_damage == "" ? "x" : input.conter_hit_damage %>
+						</div>
+						
+						<!-- Startup Frames -->
+						<div class="move_row hideable_<%= move.id %>">
+							<%= input.startup == "" ? "x" : input.startup %>
+						</div>
+						
+						<!-- Block Frames -->
+						<div class="move_row hideable_<%= move.id %>">
+							<%= input.on_block == "" ? "x" : input.on_block %>
+						</div>
+						
+						<!-- Hit Frames and Effects -->
+						<div class="move_row hideable_<%= move.id %>">
+						
+							<% effects = input.hit_effects_presentable_strings - ["Jails", ""] %>
+							
+							<% if effects.count <= 0 %>
+								<%= input.on_hit == "" ? "x" : input.on_hit %>
+							<% else %> 
+								<div class="effect_main" style="<%= effects.count <= 1 ? 'line-height:18px' : '' %>">
+									<%= effects.first %>
+								</div>
+								<%if effects.count > 1 %>
+									<div class="effect_secondary">
+									<%= effects[1] %>
+								</div>
+								<% end %>
+							<% end %>
+
+						</div>
+						
+						<!-- Counter Hit Frames and Effects -->
+						<div class="move_row hideable_<%= move.id %>">
+						
+							<% effects = input.counter_hit_effects_presentable_strings - ["Jails", ""] %>
+							<% if effects.count <= 0 %>
+								<%= input.on_counter_hit == "" ? "x" : input.on_counter_hit %>
+							<% else %> 
+								<div class="effect_main" style="<%= effects.count <= 1 ? 'line-height:18px' : '' %>">
+									<%= effects.first %>
+								</div>
+								<%if effects.count > 1 %>
+									<div class="effect_secondary">
+									<%= effects[1] %>
+								</div>
+								<% end %>
+							<% end %>
+
+						</div>
+						
+					</div>
+				<% end %>
+				
+				<!-- Column for Cancel Input if provided -->
+				<% if move.cancel_input != nil %>
+				<div class="move_col">
+					<%= render 'components/inputView', message: move.cancel_input, size:30 %>
+				</div>
+				<% end %>
+				
+			</div>
+
+			<div class="clr"></div>
+			
+		</div>
+		
+		<div class="move_row">
+			<% if move.counter != nil && move.counter != "" &&  !move.is_grab? %>
+			<div class="hideable_<%= move.id %>" style="padding: 5px; display: block; margin: 0px auto; width: 60%; text-align: center; border: 1px solid red; border-radius: 15px;">
+				<b style="color:red">Counter By:</b>
+				<%= move.counter %>
+			</div>
+			<% end %>
+		</div>
+	</div>
+	<% if show_paths %>
+		<% move.extensions.each do |extensionMove| %>
+			<div style="padding-left:20px; border-left: 1px solid #BBB;">
+				<%= render partial: 'components/moveView', locals:{ move: extensionMove, show_paths: show_paths } %>
+			</div>
+			<div class="clr"></div>
+		<% end %>
+	<% end %>
+<% end %>
+
+	

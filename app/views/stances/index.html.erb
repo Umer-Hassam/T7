@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Stances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Desc</th>
+      <th>Character</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stances.each do |stance| %>
+      <tr>
+        <td><%= stance.id %>. <%= stance.name %></td>
+        <td><%= stance.desc %></td>
+        <td><%= stance.character_id %></td>
+        <td><%= link_to 'Show', stance %></td>
+        <td><%= link_to 'Edit', edit_stance_path(stance) %></td>
+        <td><%= link_to 'Destroy', stance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Stance', new_stance_path %>

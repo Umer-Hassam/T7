@@ -1,0 +1,39 @@
+<% if defined?(char_id) %>
+	<% character = Character.find(char_id)%>
+<% end %>
+	
+	<% if character == nil %>
+		<% posts = Post.where(post_type: post_type) %>
+	<% else %>
+		<% posts = character.posts.where(post_type: post_type) %>
+	<% end %>
+	
+	<% posts.each do |post| %>
+	<% if defined?(display_type) && display_type == "mini" %>
+	
+		<div class="resource_posts_container">
+			<div class="post_title_value">
+				<%= link_to post.title, post, {:class=>"post_title_link"} %>
+			</div>
+			<div class="post_admin_options">
+				( <%= link_to "Edit", edit_post_path(post), { :style=>"line-height: 45px;"} %> )
+			</div>
+			<div class="clr"></div>
+			<div class="resource_posts_user" style="text-align:right">
+				By: Umer Hassam
+			</div>
+		</div>
+	
+	<% else %>
+		<div class="resource_posts_title">
+			<div class="post_title_value">
+				<%= post.title %>
+			</div>
+			<div class="post_admin_options">
+				( <%= link_to "Edit", edit_post_path(post) %> )
+			</div>
+			<div class="clr"></div>
+		</div>
+		<%= render 'components/interpView', text: post.details, size:"small" %>
+	<% end %>
+<% end %>

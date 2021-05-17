@@ -1,0 +1,96 @@
+<p id="notice"><%= notice %></p>
+
+<div class="main_container" style="padding:50px">
+	
+	<div class="page_title">Choose Your Character</div>
+	<div class=""><%= link_to 'New Character', new_character_path, {:class=>"button"}%></div>
+
+	<div class="characters_container">
+		
+		<% @characters.sort_by{ |c| c.name }.each do |character| %>
+			<% if !user_signed_in? && character.publish.to_i == -1 %>
+				<% next %>
+			<% end %>
+			<div class="character_card"
+			<% if character.publish.to_i == -1 %> 
+			style="border: 2px solid red;" 
+			<% elsif character.publish.to_i == 0 %>
+			style="border: 2px dotted red;"
+			<% end %>
+			>
+				<div class="character_image">
+					<% fan_arts = character.fan_arts.where(:is_main=>1) %>
+					<% offset = rand(fan_arts.count) %>
+					<% image = fan_arts.offset(offset).first %>
+					<% if image == nil %>
+					<img src="<%= character.thumb_image_link %>" width="100" height ="100">
+					<% else %>
+					<%= render 'components/fan_art_display', image:image %>
+					<% end %>
+				</div>
+				<div class="character_name">
+					<div class="archtype_div">
+						<%= character.archetype %>
+					</div>
+					<div class="name_value_div">
+						<% if character.publish.to_i == 1 %>
+							<%= link_to character.name, character %>
+						<% else %>
+							<%= link_to character.name, "#", data: { confirm: 'This character has not yet been implemented. Thankyou for your patience.' } %>
+						<% end %>
+					</div>
+					<div class="name_value_div" style="padding-top:10px">
+						(<%= character.fighting_style %>)
+					</div>
+					<!--<a href="<%= character.wiki_link %>">(wiki)</a>-->
+				</div>
+				<div class="character_actions">
+					<%= link_to 'Edit', edit_character_path(character) %> |
+					<%= link_to 'Destroy', character, method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div>
+				<div class="character_desc">
+					<%= character.gameplay %>
+				</div>
+				<div class="character_info_div">
+					<div class="info_col">
+						<div class="info_col_value">
+							<%= character.moves.count %>
+						</div>
+						<div class="info_col_title">
+							No of Moves
+						</div>
+					</div>
+					<div class="info_col">
+						<div class="info_col_value">
+							<%= character.difficulty %>/5
+						</div>
+						<div class="info_col_title">
+							Difficulty
+						</div>
+					</div>
+					<div class="info_col">
+						<div class="info_col_value">
+							<% if character.tier == "S" || character.tier == "S+" || character.tier == "S++"  %>
+								<span style="color:#FFD700">
+							<% else %>
+								<span>
+							<% end %>
+								<%= character.tier %>
+							</span>
+							
+						</div>
+						<div class="info_col_title">
+							Tier
+						</div>
+					</div>
+					<div class="clr"></div>
+				</div>
+				
+			</div>
+		<% end %>
+		<div style="clear:both"></div>
+	</div>
+</div>
+
+<%= render 'components/interpView', text: "[*h]this is a test text.[/h] move below: [@3] this move is considered one of the best moves in the game because it allowes the user to go to his home and bring a bazooka to desctroy everything. also in order to counter the user you must use the following move [@6] [*b]and finally a video to prove it:[/b] [^6L8ZB7blOW8] The older raiden only figured out his folly because he saw up his [*b]ass:[/b] [%https://www.destructoid.com/ul/591403-fujin-trailer-mk-11-aftermath.jpg,https://i2-prod.dailystar.co.uk/tech/gaming/article21977988.ece/ALTERNATES/s1200c/0_Mortal-Kombat-11.jpg,
+https://cdn-prod.mortalkombat.com/static/share.jpg] [;] source: [$Albert Einstine,http://www.alberteinstine.com] this is me"%>

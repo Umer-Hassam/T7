@@ -1,0 +1,77 @@
+// Place all the styles related to the FanArts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.gallery_img_container {
+	display: grid;
+	grid-gap: 10px;
+	padding: 0px 50px;
+	justify-items: center;
+	align-items: center;
+}
+.gallery_image {
+	position:relative;
+	
+	z-index: 1;
+	
+	width:300px;
+}
+.gallery_image:hover .artist_credit {
+	display:block;
+}
+.gallery_image img {
+	width: 100%;
+	max-width: 300px;
+	min-height: 180px;
+	min-width:300px;
+	max-height: 170px;
+	height: auto;
+	object-fit: cover;
+	object-position: 0% 0%;
+}
+@media (min-width: 500px) {
+  .gallery_img_container { grid-template-columns: repeat(1, 1fr); }
+}
+@media (min-width: 700px) {
+  .gallery_img_container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1080px) {
+  .gallery_img_container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1400px) {
+  .gallery_img_container { grid-template-columns: repeat(4, 1fr); }
+}
+
+.image_admin_options {
+	background: rgba(54, 70, 80, 0.6);
+	z-index: 2;
+	bottom: 10px;
+	position: absolute;
+	left: 10px;
+	padding: 0px 10px;
+	border-radius: 20px;
+	font-size: 10px;
+	
+}
+.image_admin_options a {
+	color:#FFF !important;
+}
+
+.artist_credit {
+	display:none;
+	
+	background: rgba(54, 70, 80, 0.6);//#364650;
+	z-index: 2;
+	bottom: 10px;
+	position: absolute;
+	right: 10px;
+	padding: 0px 6px;
+	border-radius: 20px;
+	font-size: 8px;
+	
+	color:#E4E4F7
+}
+.artist_credit a {
+	font-size: 8px;
+	color:#E4E4F7 !important;
+}

@@ -1,0 +1,353 @@
+<script>
+	$(function(){ $("#character_tabs").tabs() });
+	$(function(){ $("#anti_guides_tab").tabs() });
+	$(function(){ $("#char_tab_resources").tabs() });
+	
+	$("search_box").bind("keyup blur change mouseup",function () {
+		console.log(" text: " + $("search_box").val())
+ 	});
+</script>
+
+<div class="character_container">
+	<div id="character_tabs">
+		<div class="character_info">
+			<div class="char_info_row_title">
+				<%= @character.name %>
+				<div class="Admin Links" style="font-size:10px;line-height: 10px;margin-top: -15px;">
+					<div class="char_info_row_link">
+				  	  <%= link_to 'New Move', new_move_path(:char_id => @character.id) %> | 
+					  <%= link_to 'New Stance', new_stance_path(:char_id => @character.id) %> | 
+					  <%= link_to 'Edit', edit_character_path(@character) %>
+					</div>
+				</div>
+			</div>
+			<div class="char_info_row_links">
+				<ul>
+					<li class="hide_with is_active" to_toggle="mc_1" tab_id="menu_char_list">
+						Move List
+					</li>
+					<li class="hide_with" to_toggle="mc_2" tab_id="menu_char_list">
+						Punisher Moves
+					</li>
+					<li class="hide_with" to_toggle="mc_3" tab_id="menu_char_list">
+						Guides
+					</li>
+					<li class="hide_with" to_toggle="mc_4" tab_id="menu_char_list">
+						Other Resources
+					</li>
+					<li class="hide_with" to_toggle="mc_5" tab_id="menu_char_list">
+						Basic Info
+					</li>
+					<li class="hide_with" to_toggle="mc_6" tab_id="menu_char_list">
+						Anti <%= @character.name %>
+					</li>
+				</ul>
+			</div>
+		<div style="clear:both"></div>
+		</div>
+		<p id="notice"><%= notice %></p>
+		<div class="character_content">
+			<div class="mc_1" prevent_toggle="true">
+				<%= render 'components/movesListView', char_id:@character.id %>
+			</div>
+			<div class="mc_2" prevent_toggle="true" starts_collapsed="true">
+				<div class="basic_info_title"> Punishment Guide </div>
+				<div style="padding:0px 10px">
+					<% @character.stances.each do |stance| %>
+
+						HERE: <%= stance.backup_moves %>
+						<div class="stance_container" id="<%= stance.name %>" stance="<%= stance.name %>">
+							<div class="stance_title hide_with" to_toggle="hideable_stance_<%= stance.id %>"> 
+								<%= stance.name %>
+							</div>
+							<div class="stance_moves_list<%= stance.name.downcase.tr(" ", "_") %> hideable_stance_<%= stance.id %>" >
+
+								<% [10,11,12,13,14,15,16,17,18,19,20].each do |frame| %>
+									<% pm = stance.punisher_moves(frame) %>
+									<% if pm.count > 0 %>
+										<h3>-<%= frame %> Moves</h3>
+							
+										<% pm.each do |m| %>
+											<%= render 'components/moveView', move: m, show_paths: false %>
+										<% end %>
+									<% end %>
+								<% end %>
+						
+							</div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+			<div class="mc_3" prevent_toggle="true" starts_collapsed="true">
+				<div class="clr"></div>
+				<div class="basic_info_title" style="float:left"> Guides </div>
+				<div class="options_container" style="float:right;padding:20px 30px">
+					<%= link_to "Create New Post", new_post_url(:character_id=>@character.id, :post_type=>"C0"), {:class=>"button"} %>
+				</div>
+				<div class="clr"></div>
+				<div class="">
+					<%= render 'components/posts_list_view', 
+				:char_id=>@character.id, :post_type=>"C0", :display_type=>"mini" %>
+				</div>
+			</div>
+			<div class="mc_4" prevent_toggle="true" starts_collapsed="true">
+				<div class="basic_info_title" style="float:left;padding-right: 0px;"> Other Resources </div>
+				<div class="anti_menu_options" style="float:left; padding-top:30px">
+					<ul>
+						<li class="hide_with is_active" to_toggle="or_1" tab_id="menu_other_list">
+							Online Guides
+						</li>
+						<li class="hide_with" to_toggle="or_2" tab_id="menu_other_list">
+							Quick Tips and Tricks
+						</li>
+						<li class="hide_with" to_toggle="or_3" tab_id="menu_other_list">
+							Match Videos
+						</li>
+						<li class="hide_with" to_toggle="or_4" tab_id="menu_other_list">
+							Players to Watch
+						</li>
+						<li class="hide_with" to_toggle="or_5" tab_id="menu_other_list">
+							Fan Art
+						</li>
+					</ul>
+				</div>
+				<div class="clr"></div>
+				<div class="other_content_divs">
+					
+					<% def show_posts(post_type) %>
+						<div class="options_container">
+							<%= link_to "Create New Post", new_post_url(:character_id=>@character.id, :post_type=>post_type), {:class=>"button",:style=>"float: right;margin-right: 50px;"} %>
+						</div>
+						<%= render 'components/posts_list_view', :char_id=>@character.id, :post_type=>post_type %>
+					<% end %>
+					
+					<div class="or_1" prevent_toggle="true"><%= show_posts("CO0")%></div>
+					<div class="or_2" prevent_toggle="true" starts_collapsed="true"><%= show_posts("CO1")%></div>
+					<div class="or_3" prevent_toggle="true" starts_collapsed="true"><%= show_posts("CO2")%></div>
+					<div class="or_4" prevent_toggle="true" starts_collapsed="true"><%= show_posts("CO3")%></div>
+					<div class="or_5" prevent_toggle="true" starts_collapsed="true">
+						<%= render 'components/gallery', :char_id=>@character.id, :open_on_click=>true %>
+					</div>
+				</div>
+			</div>
+			<div class="mc_5" prevent_toggle="true" starts_collapsed="true"><div id="anti_tab_basic_info">
+					<div class="basic_info_title"> Basic Info </div>
+					<div class="properties_section">
+						<div class="properties_section_heading">
+							Counter Rules
+						</div>
+						<div class="properties_section_row">
+							<div class="properties_section_title">Side Step Direction: </div>
+							<div class="prop_section_value">
+								<% left_count  = @character.moves.select{|m|m.track_direction == "Left"}.count %>
+								<% right_count = @character.moves.select{|m|m.track_direction == "Right"}.count %>
+								<% if left_count > right_count %>
+									Side Step Right
+								<% elsif left_count < right_count %>
+									Side Step Left
+								<% else %>
+									<% none_count  = @character.moves.select{|m|m.track_direction == "None"}.count %>
+									<% both_count = @character.moves.select{|m|m.track_direction != "None"}.count %>
+									<% if none_count > both_count %>
+										Either Direction
+									<% else %>
+										Not safe to side step
+									<% end %>
+								<% end %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+						<div class="properties_section_row">
+							<div class="properties_section_title">Duckable Moves: </div>
+							<div class="prop_section_value">
+								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["H","h","High","high","L","l","Low","low"]).any?}.count %> 
+								out of
+								<%= @character.moves.count %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+						<div class="properties_section_row">
+							<div class="properties_section_title">Gameplay: </div>
+							<div class="prop_section_value">
+								<%= @character.gameplay %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+					</div>
+					<div class="properties_section">
+						<div class="properties_section_heading">
+							Move Properties
+						</div>
+						<div class="properties_section_row">
+							<div class="properties_section_title">Safe Moves: </div><div class="prop_section_value">
+								<%= @character.moves.select{|m|m.on_block.to_i > -10}.count %>
+							</div>
+							<div style="clear:both"></div>
+							<div class="properties_section_title">Unsafe Moves: </div><div class="prop_section_value">
+								<%= @character.moves.select{|m|m.on_block.to_i <= -10}.count %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+						<div class="properties_section_row">
+							<div class="properties_section_title">High Moves: </div><div class="prop_section_value">
+								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["H","h","High","high"]).any?}.count %>
+							</div>
+							<div style="clear:both"></div>
+							<div class="properties_section_title">Mid Moves: </div><div class="prop_section_value">
+								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["M","m","Medium","medium", "Med", "med"]).any?}.count %>
+							</div>
+							<div style="clear:both"></div>
+							<div class="properties_section_title">Low Moves: </div><div class="prop_section_value">
+								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["L","l","Low","low"]).any?}.count %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+						
+						<div class="properties_section_row">
+							<% Property.all.each do |prop| %>
+								<div class="properties_section_title"><%= prop.name %>: </div>
+								<div class="prop_section_value">
+									<%= @character.moves.select{|m|m.properties.select{|p|p.name == prop.name}.count>0}.count %>
+								</div>
+								<div style="clear:both"></div>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mc_6" prevent_toggle="true" starts_collapsed="true">
+				<div class="basic_info_title" style="float:left;padding-right: 0px;"> Anti <%= @character.name %> </div>
+				<div class="anti_menu_options" style="float:left; padding-top:30px">
+					<ul>
+						<li class="hide_with is_active" to_toggle="ac_1" tab_id="menu_anti_list">
+							Punishable Moves
+						</li>
+						<li class="hide_with" to_toggle="ac_2" tab_id="menu_anti_list">
+							Quick Tips
+						</li>
+						<li class="hide_with" to_toggle="ac_3" tab_id="menu_anti_list">
+							Online Guides
+						</li>
+					</ul>
+				</div>
+				<div class="clr"></div>
+				<div class="anti_content_divs">
+					<div class="ac_1" prevent_toggle="true">
+						<% [-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-20].each do |frame| %>
+							<h3><%= frame %> Moves</h3>
+							<% @character.moves.select{|m|m.on_block.to_i == frame }.each do |move| %>
+								<%= render 'components/moveView', move: move, show_paths: false %>
+							<% end %>
+						<% end %>
+					</div>
+					<div class="ac_2" prevent_toggle="true" starts_collapsed="true">
+						<%= show_posts("CA0")%>
+					</div>
+					<div class="ac_3" prevent_toggle="true" starts_collapsed="true">
+						<%= show_posts("CA1")%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+<%= form_for @character.stances.first, url: {:controller => "stances", action: "restore_moves", params: {id: @character.stances.first.id}}, method: :post do |f|%>
+
+<% res = @character.moves.where(:id => 258).first.backup_json %>
+<textarea style="width: 80%;margin-left: 10%;margin-right: 10%;height: 100px;">
+	<%= res %>
+</textarea>
+
+<%end%>
+
+<script>
+	$(document).ready(checkContainer);
+	var check_attempted = 0
+	function checkContainer () {
+	  //if($('#divIDer').is(':visible'))){ //if the container is visible on the page
+		if ($('[to_toggle]').length > 0 || check_attempted > 10) {
+			collapseMoveDivs();
+		} else {
+			check_attempted += 1;
+			setTimeout(checkContainer, 50); //wait 50 ms, then try again
+		}
+	}
+	
+//	$(document).ready(function(){
+//	$(window).on('load', function() {
+ 	function collapseMoveDivs() {
+		
+		$('[to_toggle]').each(function() {
+			
+			var to_hide_value = "." + $(this).attr('to_toggle')
+			div_to_hide = $(to_hide_value)
+			
+			if (div_to_hide.attr("starts_collapsed") == "true") {
+				div_to_hide.hide();
+				
+			}
+			
+		});
+	}
+//	});
+	
+
+	$('.hide_with').unbind().click(function(){
+		
+		// Iterate over all tab items
+		var tab_id = $(this).attr("tab_id");
+		// Only add is_active class if the item has tab_id
+		if (tab_id != null) {
+			$('[tab_id='+tab_id+']').each(function() {
+				$(this).removeClass("is_active");
+			
+				var to_toggle = $(this).attr("to_toggle");
+				$("."+to_toggle).hide();
+			});
+			$(this).addClass("is_active");
+		}
+		
+		var to_toggle = "."+ $(this).attr('to_toggle');
+		var found_toggle_divs = $(to_toggle);
+		
+		$.each(found_toggle_divs, function() {
+			if ($(this).is(":visible")) {
+				if ($(this).attr("prevent_toggle") != "true") {
+					$(this).hide();
+				}
+			} else {
+				$(this).show()
+			}
+        });
+		
+		// // Hide any divs defined as to_toggle
+// 		var divs_to_hide = $(this).attr("to_hide")
+// 		if (divs_to_hide != null) {
+// 			divs_to_hide = divs_to_hide.split(",");
+// 			// Hide other related divs
+// 			$.each(divs_to_hide, function(){
+// 				$("."+this).hide();
+// 			});
+//
+// 		} else {
+// 			//console.log("NULL")
+// 		}
+
+		// Set selected item to active and the rest to inactive
+		//$(this).addClass("is_active");
+		// Go through each to div that has the to_toggle attribute
+		//$('[to_toggle]').each(function() {
+			// If any element has to_toggle value set to a value contained in the divs_to_hide array
+			//});
+		//$("."+this).removeClass("is_active");
+		
+		
+		
+	});
+
+	$('#link_toggle_move_paths').bind( "click", function() {
+  		alert( "User clicked on 'foo.'" );
+	});
+</script>

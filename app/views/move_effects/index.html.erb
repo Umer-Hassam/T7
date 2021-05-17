@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Move Effects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Image url</th>
+      <th>Desc</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @move_effects.each do |move_effect| %>
+      <tr>
+        <td><%= move_effect.name %></td>
+        <td><%= move_effect.image_url %></td>
+        <td><%= move_effect.desc %></td>
+        <td><%= link_to 'Show', move_effect %></td>
+        <td><%= link_to 'Edit', edit_move_effect_path(move_effect) %></td>
+        <td><%= link_to 'Destroy', move_effect, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Move Effect', new_move_effect_path %>

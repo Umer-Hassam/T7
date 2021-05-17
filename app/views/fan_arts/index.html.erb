@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Fan Arts</h1>
+
+<%# fan_art.link %>
+<%# fan_art.artist_name %>
+<%# fan_art.artist_link %>
+<%# fan_art.art_type %>
+<%# fan_art.style %>
+<%# fan_art.is_main %>
+<%# fan_art.description %>
+<%# link_to 'Show', fan_art %>
+<%# link_to 'Edit', edit_fan_art_path(fan_art) %>
+<%# link_to 'Destroy', fan_art, method: :delete, data: { confirm: 'Are you sure?' } %>
+
+<%= link_to 'New Fan Art', new_fan_art_path, :class => "button" %>
+
+<%= render 'components/gallery', size:"small" %>

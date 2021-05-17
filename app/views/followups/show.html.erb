@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Is guaranteed:</strong>
+  <%= @followup.is_guaranteed %>
+</p>
+
+<p>
+  <strong>Hit status:</strong>
+  <%= @followup.hit_status %>
+</p>
+
+<p>
+  <strong>Explanation:</strong>
+  <%= @followup.explanation %>
+</p>
+
+<%= link_to 'Edit', edit_followup_path(@followup) %> |
+<%= link_to 'Back', followups_path %>

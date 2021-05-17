@@ -1,0 +1,133 @@
+<script>
+	$(document).ready(function(){
+		$('#format_heading').on('click',
+		    function () {
+				wrapText("text_area", "[*h]", "[/h]");
+		    }
+		);
+		
+		$('#format_newline').on('click',
+		    function () {
+				insertText("text_area", "[;]");
+		    }
+		);
+		
+		$('#format_bold').on('click',
+		    function () {
+				wrapText("text_area", "[*b]", "[/b]");
+		    }
+		);
+		
+		
+		$('#format_move').on('click',
+		    function () {
+				$(".move_selector_container")[0].style.display = "block";
+		    }
+		);
+		
+		$('#format_youtube').on('click',
+		    function () {
+				insertText("text_area", "[^VIDEO_ID]");
+		    }
+		);
+		
+		$('#format_image').on('click',
+		    function () {
+				insertText("text_area", "[%IMAGE_URL,IMAGE_URL]");
+		    }
+		);
+		
+		$('#format_link').on('click',
+		    function () {
+				wrapText("text_area", "[$LINK_TEXT", ",URL_LINK]");
+		    }
+		);
+	});
+	
+	function wrapText(elementID, openTag, closeTag) {
+	    var textArea = $('#' + elementID);
+	    var len = textArea.val().length;
+	    var start = textArea[0].selectionStart;
+	    var end = textArea[0].selectionEnd;
+	    var selectedText = textArea.val().substring(start, end);
+	    var replacement = openTag + selectedText + closeTag;
+	    textArea.val(textArea.val().substring(0, start) + replacement + textArea.val().substring(end, len));
+	}
+	function insertText(elementID, insertTag) {
+	    var textArea = $('#' + elementID);
+	    var len = textArea.val().length;
+	    var start = textArea[0].selectionStart;
+	    var end = textArea[0].selectionEnd;
+	    var selectedText = textArea.val().substring(start, end);
+	    var replacement = insertTag//openTag + selectedText + closeTag;
+	    textArea.val(textArea.val().substring(0, start) + replacement + textArea.val().substring(end, len));
+	}
+	
+	
+</script>
+	
+<script>
+	$(document).ready(function(){
+		$(".selectable_move_container").click(function() {
+			$(".move_selector_container")[0].style.display = "none";
+			
+			var char_id = $('#move_select_character_dropdown').val();
+			var move_id = $(this).attr("move_id");
+			
+			insertText('text_area', '[@'+ char_id +','+ move_id +']' )
+		});
+	});
+</script>
+	
+<%= form_with(model: post, local: true) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+	<div class="format_button" id="format_heading">Heading</div>
+	<div class="format_button" id="format_newline">New Line</div>
+	<div class="format_button" id="format_bold">Bold</div>
+	<div class="format_button" id="format_move">Insert Move</div>
+	<div class="format_button" id="format_youtube">Insert Youtube</div>
+	<div class="format_button" id="format_image">Insert Image</div>
+	<div class="format_button" id="format_link">Insert Link</div>
+	<div style="clear:both"></div>
+  <div class="field">
+    <%= form.label :details %>
+    <%= form.text_area :details, {:id=>"text_area",:style=>"margin: 0px;width: 600px;height: 150px;"}%>
+  </div>
+
+	<div class="field">
+		Character: <%= form.select :character_id, options_from_collection_for_select(Character.all, 'id', 'name', params[:char_id]) %>
+	</div>
+	
+	<div class="field">
+		Type: <%= form.text_field :post_type, { :value => @post.persisted? ? @post.post_type : params[:post_type] } %>
+	</div>
+	
+  <div class="field">
+    <%= form.number_field :user_id, {:hidden=>true,:value=>current_user.id} %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<div class="move_selector_container" style="display:none;background:#EEE;position: absolute; top: 0; left: 0;width: 100%; height: 100%;">
+	<div style="height:80%;width:300px;background: #FFF;padding: 20px;margin: 0 auto;margin-top: 50px;">
+		<%= render 'components/movesListView', view_style:"mini" %> 
+	</div>
+</div>

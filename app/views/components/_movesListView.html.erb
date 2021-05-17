@@ -1,0 +1,253 @@
+
+	
+<% if defined?(char_id) %>
+	<% characters = [Character.find(char_id)]%>
+<% else %>
+	<% characters = Character.all %>
+<% end %>
+
+
+<div>
+	
+	<% if !defined?(char_id) %>
+		<div style="padding:10px; background:#FFF;box-shadow: 0 2px 4px -4px rgba(0, 0, 0, 0.5);">
+			Character: <%= select_tag('move_select_character_dropdown', options_from_collection_for_select(Character.all, 'id', 'name')) %>
+		</div>
+	<% end %>
+	<div style="padding: 20px 30px 10px 30px;">
+		<div class="filter_search_div">
+			<input type="text" id="search_box" onkeyup="myFunction()" placeholder="Search names or input" class="filter_text_field">
+		</div>
+		<div class="filter_options_div">
+			<% if defined?(@character) %>
+	
+				<%= select_tag('move_stance_dropdown', options_from_collection_for_select(@character.stances, 'name', 'name'), :prompt => "Filter by Stance", :class=>"filter_select" ) %>
+	
+				<%= select_tag('move_properties_dropdown', options_from_collection_for_select(Property.all, 'name', 'name'), :prompt => "Filter by Property", :class=>"filter_select") %>
+	
+				<%= select_tag('move_purpose_dropdown', options_from_collection_for_select(Purpose.all, 'name', 'name'), :prompt => "Filter by Tag", :class=>"filter_select") %>
+				<!--
+				Block Frames: <%= select_tag 'move_frames_dropdown', options_for_select(
+						[
+							['Any' ,'Any'],
+							['+ on block' ,'+ on block'],
+							['neutral' ,'neutral'],
+							['-1 to -5', '-1 to -5'],
+							['-6 to -9', '-6 to -9'],
+							['-10 to -13', '-10 to -13'],
+							['-14', '-14'],
+							['-15', '-15'],
+							['-16 and above', '-16 and above']
+						]
+					) %>
+			<% end %>
+				-->
+				<% if params['show_paths'] == 'all' %>
+					<%= link_to image_tag("/images/icon_hide_move_extensions.png", border: 0), url_for( @character ) %>
+				<% else %>
+					<%= link_to image_tag("/images/icon_show_move_extensions.png", border: 0), url_for( :show_paths => "all" ) %>
+				<% end %>
+			</div>
+			<div class="clr"></div>
+	</div>
+	
+	<% characters.each do |character| %>
+		<% if defined?(view_style) %>
+			<div style="padding:10px" class="char_div" id="char_<%= character.id %>">
+				<% i = 0 %>
+				<% character.moves.each do |move| %>
+					<div class="selectable_move_container" style="text-align: center;background:<%= i % 2 == 0 ? "#BBB4" : "#AAA5" %>" move_id="<%= move.id %>">
+						<div class="b">
+							<div class="move_name">
+								<a> <%= move.name %> </a>
+							</div>
+							<div>
+								<%= render 'components/inputView', message: move.complete_input_array.map{|m|m.input}.reverse.join(","), size:20 %>
+							</div>
+						</div>
+					</div>
+					<% i = i + 1 %>
+				<% end %>
+			</div>
+			
+		<% else %>
+
+			<div style="padding:10px" class="char_div" id="char_<%= character.id %>">
+				<% character.stances.each do |stance| %>
+					<div class="stance_container" id="<%= stance.name %>" stance="<%= stance.name %>">
+						<div class="stance_title hide_with" to_toggle="hideable_stance_<%= stance.id %>"> 
+							<%= stance.name %> 
+							<span style="font-size:16px">
+								(<%= stance.child_moves.count %> moves)
+							</span>
+						</div>
+						<div class="stance_moves_list<%= stance.name.downcase.tr(" ", "_") %> hideable_stance_<%= stance.id %>" >
+
+							<% if params['show_paths'] == 'all' %>
+								<% filtered_moves = stance.parent_moves %>
+							<% else %>
+								<% filtered_moves = stance.child_moves %>
+							<% end %>
+		
+							<% if params["hide_routes"] == "true" %>
+								<% filtered_moves = stance.moves_sorted_by_input.select {|m| m.extensions.count <= 0 } %>
+							<% end %>
+							
+							<% filtered_moves.each do |move| %>
+								<%= render 'components/moveView', move: move, show_paths: params['show_paths'] == 'all' %>
+							<% end %>
+							
+						</div>
+					</div>
+				<% end %>
+			</div>
+		<% end %>
+	<% end %>
+</div>
+
+
+<script>
+	
+	<% if !defined?(char_id) %>
+	$(document).ready(function(){
+		
+		toggle("char_div", "char_1");
+		$('#move_select_character_dropdown').on('change', function() {
+		  toggle("char_div", "char_"+this.value);
+		});
+	});
+	<% end %>
+	
+	$(document).ready(function(){
+		var selected_stance = ""
+		var selected_property = ""
+		var selected_tag = ""
+		
+		function applyFilters(){
+			resetAllMovesVisibility();
+			
+			applyStanceFilter();
+			applyPropertiesFilter();
+			applyTagsFilter();
+		}
+		
+		function resetAllMovesVisibility(){
+		    toggleDivVisibility("move_container", true);
+		}
+		
+		function applyStanceFilter(){
+			if (selected_stance == "") {
+				toggleDivVisibility("stance_container", true);
+			} else {
+				toggle("stance_container", selected_stance);
+			}
+		}
+		
+		function applyPropertiesFilter(){
+			if (selected_property != "") {
+			    var elements = document.getElementsByClassName("move_properties")
+
+			    for (var i = 0; i < elements.length; i++){
+					if (elements[i].parentElement.parentElement.style.display == "none"){ continue; }
+					
+					var spans = $(elements[i]).find("span");
+				
+					var found = false
+					for (var j = 0; j < spans.length; j++){
+						if ($(spans[j]).text().trim() == selected_property.trim()) {
+							found = true
+							break;
+						}
+					}
+				
+					elements[i].parentElement.parentElement.style.display = found ? "block" : "none"
+			    }
+			}
+		}
+		
+		function applyTagsFilter(){
+			if (selected_tag != "") {
+			    var elements = document.getElementsByClassName("move_purposes")
+
+			    for (var i = 0; i < elements.length; i++){
+					if (elements[i].parentElement.parentElement.style.display == "none"){ continue; }
+					
+					var spans = $(elements[i]).find("span");
+					var found = false
+					for (var j = 0; j < spans.length; j++){
+						
+						if ($(spans[j]).text().trim() == selected_tag.trim()) {
+							found = true
+							break;
+						}
+					}
+					
+					elements[i].parentElement.parentElement.style.display = found ? "block" : "none"
+			    }
+			}
+		}
+		
+		$('#move_stance_dropdown').on('change', function() {
+			selected_stance = this.value;
+			applyFilters();
+		});
+		
+		$('#move_properties_dropdown').on('change', function() {
+			selected_property = this.value.trim()
+			applyFilters();
+		});
+		
+		$('#move_purpose_dropdown').on('change', function() {
+			selected_tag = this.value.trim()
+			applyFilters();
+		});
+		
+	});
+	
+	function toggle(className, idName){
+	    var elements = document.getElementsByClassName(className)
+
+	    for (var i = 0; i < elements.length; i++){
+			if (elements[i].id == idName){
+				elements[i].style.display = "block"
+			} else {
+				elements[i].style.display = "none"
+			}
+	    }
+	}
+	
+	function toggleDivVisibility(className, status){
+	    var elements = document.getElementsByClassName(className)
+	    for (var i = 0; i < elements.length; i++){
+			elements[i].style.display = status ? "block" : "none"
+	    }
+	}
+</script>
+<script>
+	// This method makes the search bar work
+	function myFunction() {
+		
+		// Declare variables
+		var input, filter, ul, li, a, i, txtValue;
+		input = document.getElementById('search_box');
+		filter = input.value.toUpperCase();
+		
+		var parent_div = $('.char_div:visible')[0]
+		move_div = $(parent_div).find(".move_title")
+
+		// Loop through all list items, and hide those who don't match the search query
+		for (i = 0; i < move_div.length; i++) {
+			
+			txtValue = move_div[i].textContent || move_div[i].innerText;
+			inputValue = $(move_div[i])//.parentElement.parentElement.attr('input');
+			iv = $(inputValue[0].parentElement.parentElement).attr('input')
+
+			if (txtValue.toUpperCase().indexOf(filter) > -1 || iv.toUpperCase().startsWith(filter)) {
+				move_div[i].parentElement.parentElement.style.display = "block";
+				$(move_div[i].parentElement.parentElement).css('padding-left','0px');
+			} else {
+				move_div[i].parentElement.parentElement.style.display = "none";
+			}
+		}
+	}
+</script>

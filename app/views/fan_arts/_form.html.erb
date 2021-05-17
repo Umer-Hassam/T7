@@ -1,0 +1,61 @@
+<%= form_with(model: fan_art, local: true) do |form| %>
+  <% if fan_art.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(fan_art.errors.count, "error") %> prohibited this fan_art from being saved:</h2>
+
+      <ul>
+        <% fan_art.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :link %>
+    <%= form.text_field :link %>
+  </div>
+
+  <div class="field">
+    <%= form.label :artist_name %>
+    <%= form.text_field :artist_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :artist_link %>
+    <%= form.text_field :artist_link %>
+  </div>
+
+  <div class="field">
+    <%= form.label :art_type %>
+    <%= form.text_field :art_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :style %>
+    <%= form.text_field :style %>
+  </div>
+
+  <div class="field">
+    <%= form.label :is_main %>
+    <%= form.text_field :is_main %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :character %>
+    <%= form.collection_select :character_id, Character.all, :id, :name %>
+  </div>
+  
+  <div class="field">
+    <%= form.text_field :profile_id, { :value => Profile.first.id } %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

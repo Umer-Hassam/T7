@@ -1,0 +1,217 @@
+// Place all the styles related to the Moves controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 550px;
+  background-color: black;
+  color: #fff;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  
+  top:50px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltipSection {
+	padding:10px;
+}
+
+
+.breadcrumb_container{
+	padding: 10px 30px;
+	background: white;
+	margin: 10px;
+	box-shadow: 0 2px 4px -4px rgba(0, 0, 0, 0.5);
+}
+.breadcrumb_input {
+	float:left
+}
+.breadcrumb_spacer {
+	float: left;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+	
+	font-size:18px;
+	font-weight:bold;
+}
+.actions {
+	padding: 10px 30px;
+	background: white;
+	margin: 10px;
+	box-shadow: 0 2px 4px -4px rgba(0, 0, 0, 0.5);
+}
+
+.move_container{
+	background-color:#FFF;
+	padding:20px;
+	margin: 5px 20px 10px 20px;//margin-bottom:5px;
+	box-shadow: 0 2px 4px -4px rgba(0,0,0,.5);
+	border: 1px solid #DDD;
+	
+	position:relative;
+}
+.move_container:hover .click_to_expand_msg{
+	display:block;
+}
+.click_to_expand_msg {
+	color: #E5E5EC;
+    position: absolute;
+    bottom: 5px;
+    right: 5%;
+    font-size: 12px;
+	
+	display:none;
+}
+
+.tab_followups {
+	padding: 30px 100px;
+}
+.tab_followups_title {
+	font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    background: #CCF;
+    margin: 0px 50px;
+}
+.tab_followups_value {
+    padding: 10px;
+    background: #DDD6;
+    margin: 0px 50px 10px 50px;
+}
+.tab_followups_value h3 {
+	background: #EEF;
+    padding: 10px;
+    margin: 0px;
+}
+
+.followup_option {
+	background:#DDF;
+	float: left;
+	padding: 3px 100px;
+	width: 19.44%;
+}
+.stuff #tabs ul {
+	background:#ACF;
+    
+}
+.stuff #tabs li{
+	background:#ACF;
+    display: block;
+    float: left;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0px 3px;
+}
+.stuff #tabs li:hover {
+	background:#CCF;
+}
+
+.stuff #tabs li a {
+	text-decoration:none;
+	color:white;
+	display:block;
+	width:100%;
+	height:100%;
+	outline: none; 
+}
+.stuff #tabs li a:hover {
+	text-decoration:none;
+	color:white;
+	background:#CCF;
+}
+.ui-state-active{ background:#CCF !important;}
+.stuff #tabs2 .ui-tabs-panel h2{
+	padding:0px 60px;
+	font-size: 25px;
+}
+.section_heading_large {
+	float:left; 
+	margin: 5px 15px 0px 100px;
+	text-shadow: 1px 1px #EEE;
+}
+
+
+.clr {clear:both;}
+.mcr {}
+.mcr .move_row{}
+.mcr .move_col{
+	float:left;
+	text-align:center;
+	padding-left:10px;
+}
+.col20{
+	width:20%;
+}
+.move_title {
+	font-weight:bold;
+    padding: 0px 8px;
+	font-size: 20px;
+	line-height: 32px;
+}
+.move_title a {
+	//font-family: 'Antonio', sans-serif !important;
+	font-weight:400;
+	font-size: 24px !important;
+}
+.move_title a:hover {
+	text-decoration:underline;
+}
+.admin_options {
+	padding: 8px 0px;
+	font-size: 10px;
+}
+.move_properties {
+	float: right !important;
+	padding: 8px 0px 8px 0px;
+}
+.move_purposes {
+	padding: 8px 0px 8px 0px;
+}
+.mcr .move_row.hideable{
+	display:none;
+}
+.hit_level_container {
+	padding: 2px 10px;
+	text-align:center;
+	width: 30px;
+	border-radius: 5px;
+	color: white;
+	margin: 0 auto;
+}
+.property_jails {
+	font-size:8px;
+	color:#0AA
+}
+
+.effect_main{
+	color: red;
+    font-weight: bold;
+    line-height: 8px;
+}
+.effect_secondary {
+	font-size: 6px;
+    color: red;
+    line-height: 10px;
+}
+.extension_visibility {
+	padding-left: 0px;
+    margin-right: -10px;
+    /* vertical-align: middle; */
+    height: 100%;
+    padding-top: 5px;
+}

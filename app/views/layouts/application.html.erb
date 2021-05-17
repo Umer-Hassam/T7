@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><!DOCTYPE html>
+<html>
+  <head>
+    <title>TEKKEN MASTER</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+	
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com"> 
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+	  <div class="main_nav_bar">
+		  <div class="heading_div">
+		  	Tekken Master
+		  	<div class="tag_line">
+		  		Alpha v1.0
+		  	</div>
+		  </div>
+		  <div class="links_div">
+			  <ul>
+				  <li> <%= link_to "Characters", characters_path %> </li>
+				  <li> <%= link_to "General Guides", posts_path %> </li>
+				  <li> <%= link_to "Move Effects", move_effects_path %> </li>
+				  <li> <%= link_to "Move Properties", properties_path %> </li>
+				  <li> <%= link_to "Move Purpose", purposes_path %> </li>
+				  <li> <%= link_to "Posts", posts_path %> </li>
+			  </ul>
+		  </div>
+		  <div class="clr"></div>
+	  </div>
+	  <%= yield %>
+  </body>
+	
+</html>

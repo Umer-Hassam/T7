@@ -1,0 +1,101 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+body{
+	margin:0px;
+	padding:0px;
+	background-color:#f1f4f8;//f3f3f3;//dedede//f0f0f0;
+	
+	font-family: 'Roboto', sans-serif;
+//	font-weight: 100;
+}
+#notice { margin:0px;}
+a {
+	color: #000;
+	text-decoration:none;
+	background-color:#FFF;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+	background-color:rgba(0,0,0,0.0);
+}
+a:hover{
+	background-color:rgba(0,0,0,0.0);
+	color:green;
+}
+a:visited {
+	color: #000;
+	background-color:rgba(0,0,0,0.0);
+}
+.button {
+	padding: 10px;
+	background: #BBC;
+	border-radius: 5px;
+	font-weight: 100;
+}
+.button:hover{
+	background: #BBC;
+}
+.main_nav_bar {
+//	padding: 20px 10px;
+	margin: 0px;
+	background-color: #364650;
+}
+.heading_div {
+	color: #FFF;
+	float: left;
+	height: 100%;
+	display: block;
+	line-height: 30px;
+	padding-top: 10px;
+	padding-left: 20px;
+
+	font-family: 'Antonio', sans-serif !important;
+	font-size: 26px !important;
+}
+.tag_line {
+	font-size: 10px;
+	font-family: "Roboto", sans-serif;
+	font-weight: 100;
+	padding: 0px;
+	line-height: 10px;
+	text-align: right;
+}
+.links_div {
+	float:right;
+}
+.links_div ul {
+	font-size: 14px;
+	line-height: 0px;
+	margin: 0px;
+}
+.links_div ul li {
+	float: left;
+	text-decoration: none;
+	display: block;
+	line-height:60px;
+}
+.links_div ul li a {
+	color: #FFF;
+	display: block;
+	text-decoration: none;
+	padding:0px 10px;
+}
+.links_div ul li a:hover {
+	color: #364650;
+	display: block;
+	text-decoration: none;
+	background:#FFF;
+}

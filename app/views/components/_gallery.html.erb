@@ -1,0 +1,17 @@
+<% if defined?(char_id) %>
+<% images = Character.find(char_id).fan_arts%>
+<% else %>
+<% images = FanArt.all %>
+<% end %>
+
+<div class="gallery_img_container">
+	
+	<% images.each do |image| %>
+	
+	<div style="<%= image.is_main.to_i == 1 ? "border:3px solid green;" : "" %>">
+	<%= render 'components/fan_art_display', image:image, open_on_click:true %>
+	</div>
+
+	<% end %>
+
+</div>

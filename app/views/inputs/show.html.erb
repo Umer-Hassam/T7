@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @input.name %>
+</p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @input.image_url %>
+</p>
+
+<p>
+  <strong>Is direction:</strong>
+  <%= @input.is_direction %>
+</p>
+
+<%= link_to 'Edit', edit_input_path(@input) %> |
+<%= link_to 'Back', inputs_path %>

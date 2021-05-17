@@ -1,0 +1,60 @@
+<%= form_with(model: character, local: true) do |form| %>
+  <% if character.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(character.errors.count, "error") %> prohibited this character from being saved:</h2>
+
+      <ul>
+        <% character.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wiki_link %>
+    <%= form.text_field :wiki_link %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :full_image_link %>
+    <%= form.text_field :full_image_link %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :thumb_image_link %>
+    <%= form.text_field :thumb_image_link %>
+  </div>
+  
+  <div class="field">
+    Fighting Style: <%= form.text_field :fighting_style %>
+  </div>
+  <div class="field">
+    Archetype: <%= form.text_field :archetype %>
+  </div>
+  <div class="field">
+    Difficulty: <%= form.text_field :difficulty %>
+  </div>
+  <div class="field">
+    Tier: <%= form.text_field :tier %>
+  </div>
+  <div class="field">
+    Publish: <%= form.text_field :publish %>
+  </div>
+
+  <div class="field">
+    <%= form.label :gameplay %>
+    <%= form.text_area :gameplay %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit %>
+	<%= submit_tag 'Create Without Moves', name: 'create_without_moves' %>
+	<%= submit_tag 'Create Without Stances', name: 'create_without_stances' %>
+  </div>
+<% end %>

@@ -1,0 +1,116 @@
+<script>
+	$(function(){ $("#tabs").tabs() });
+	$(function(){ $("#tabs2").tabs() });
+	$(function(){ $("#tabs_most_damage").tabs() });
+</script>
+<p id="notice"><%= notice %></p>
+
+< <%= link_to @move.character.name, @move.character %> <br>
+<p>
+	<h3><%= @move.name %></h3>
+	<%= render 'components/moveView', move: @move, show_paths: false%>
+</p>
+
+<%= link_to 'Edit', edit_move_path(@move) %> |
+<%= link_to 'Back', character_path(@move.character) %>
+
+<div class="stuff">
+	<div id="tabs">
+	  <ul>
+	    <li><a href="#tabs-1">COMMENTS</a></li>
+	    <li><a href="#tabs-2">FOLLOWUPS</a></li>
+	    <li><a href="#tabs-3">MIXED WITH</a></li>
+	  </ul>
+	  <div style="clear:both"></div>
+	  <div class="tab_bar" id="tabs-1">
+		  <h2 class="section_heading_large">  Comments </h2>
+			<div class="options_container">
+				<%= link_to "Create New Post", new_post_url(:character_id=>@move.character.id, :post_type=>"M0") %>
+			</div>
+			<%= render 'components/posts_list_view', :char_id=>@move.character.id, :post_type=>"M0" %>
+	  </div>
+	  
+	  <div id="tabs-2">
+		  <h2 class="section_heading_large"> Followups </h2>
+		  <div id="tabs2">
+			  <div class="list_section">
+				  <ul>
+					  <li><a href="#on_hit">On Hit</a></li>
+					  <li><a href="#on_counter_hit">On Counter Hit</a></li>
+					  <li><a href="#on_block">On Block</a></li>
+				  </ul>
+				  <div style="clear:both"></div>
+			  		
+					<% def a(status) %>
+					<% Followup.where(:preceding_move_id=>@move.id,:hit_status=>status).each do |followup| %>
+						
+						<% move = Move.find(followup.followup_move_id) %>
+						<% if followup.is_guaranteed %>
+							<span style="color:red">guaranteed</span>
+						<% end %>
+							<%= render 'components/moveView', move: move, show_paths: false %>
+						<% end %>
+					<% end %>
+					
+				  <div id="on_hit">
+						<div class="tab_followups_title">  Followup Moves: </div>
+						<div class="tab_followups_value">
+							<% a(1) %>
+						</div>
+					
+				  </div>
+			  
+				  <div id="on_counter_hit">
+					<div class="tab_followups_title">  Followup Moves: </div>
+					<div class="tab_followups_value">
+						<% a(2) %>
+					</div>
+				  </div>
+			  
+				  <div id="on_block">
+					<div class="tab_followups_title">  Followup Moves:  </div>
+					<div class="tab_followups_value">
+						<% a(0) %>
+					</div>
+				</div>
+			 </div>
+			 <div clss="new_section">
+				 <div class="move_area" style="float:left">
+					 <div class="move_selector_container" style="display:block;width: 40%; height: 100%;">
+					 	<div style="height:80%;width:300px;background: #FFF;
+									padding: 20px;margin: 0 auto;margin-top: 50px;">
+					 		<%= render 'components/movesListView', view_style:"mini", char_id:@move.character.id %> 
+					 	</div>
+					 </div>
+				 </div>
+				 
+				 <div class="form_area" style="float:left">
+			 		 <%= render 'followups/form', followup: @followup %>
+				 </div>
+				 <div class="clr"></div>
+			 </div>
+		  </div>
+	  </div>
+	  
+	  <div id="tabs-3">
+	    <h2 class="section_heading_large">  Mixed With </h2>
+	  </div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$(".selectable_move_container").click(function() {
+			var move_id = $(this).attr("move_id");
+			$('#followup_followup_move_id').val(move_id);
+		});
+	});
+	
+	$('#insert_move_link').on('click',
+	    function () {
+			console.log("LOG " + $(".move_selector_container").length);
+			$(".move_selector_container")[0].style.display = "block";
+//			console.log("LOG " + $(".move_selector_container")[0].style.display);
+	    }
+	);
+</script>

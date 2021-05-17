@@ -1,0 +1,285 @@
+<%= move.name %>
+<div style="padding:30px">
+	
+	<% if move.persisted? %>
+		<div class="breadcrumb_container">
+			<div class="breadcrumb_spacer" style="margin-right:30px">
+				<%= link_to(character_path(move.character)) do %>
+					< <%= move.character.name %>
+				<% end %>
+			</div>
+			<% pm = move %>
+			<% move_array = [pm] %>
+			<% loop do %>
+				<% break if pm.parent == nil %>
+				<% pm = pm.parent %>
+				<% move_array << pm %>
+			<% end %>
+			
+			<% move_array.reverse.each do |m| %>
+				<div class="breadcrumb_input"> 
+					<%= link_to(edit_move_path(m)) do %>
+					  <%= render 'components/inputView', message: m.input %> 
+					<% end %>
+				</div>
+				<div class="breadcrumb_spacer">></div>
+			<% end %>
+			<div style="clear:both"></div>
+		</div>
+	<% else%>
+		<div class="breadcrumb_container" style="margin-right:30px">
+			<% if move.character != nil %>
+				<%= link_to(character_path(move.character)) do %>
+					< <%= move.character.name %>
+				<% end %>
+			<% else %>
+				<%= link_to(character_path(Character.find(params["char_id"]))) do %>
+					< <%= Character.find(params["char_id"]).name %>
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
+	
+	<%= form_with(model: move, local: true) do |form| %>
+	  <% if move.errors.any? %>
+	    <div id="error_explanation">
+	      <h2><%= pluralize(move.errors.count, "error") %> prohibited this move from being saved:</h2>
+
+	      <ul>
+	        <% move.errors.full_messages.each do |message| %>
+	          <li><%= message %></li>
+	        <% end %>
+	      </ul>
+	    </div>
+	  <% end %>
+  
+		<div class="move_container" style="
+		<% if move.on_block.to_i > 14 %>
+		border-left: 5px solid #f5dfdf;
+		<% elsif move.on_block.to_i > 10 %>
+		border-left: 5px solid #f5e7c4;
+		<% else %>
+		border-left: 5px solid #edf5e6;
+		<% end %>
+		">
+			<div style="float:left">
+				<div class="field_container">
+					<div class="field_label">
+						Character: 
+					</div>
+					<div class="field_value">
+						<% if @move.character_id %>
+							<%= form.select :character_id, options_from_collection_for_select(Character.all, 'id', 'name', @move.character_id) %>
+						<% else %>
+							<%= form.select :character_id, options_from_collection_for_select(Character.all, 'id', 'name', params[:char_id]) %>
+						<% end %>
+					</div>
+			
+					<div class="field_label">
+						Stance:
+					</div>
+					<div class="field_value">
+						<% if @move.character_id %>
+						<%= form.select :stance_id, options_from_collection_for_select(@move.character.stances, 'id', 'name', @move.stance_id) %>
+						<% else %>
+						<%= form.select :stance_id, options_from_collection_for_select(Character.find(params[:char_id]).stances, 'id', 'name') %>
+						<% end %>
+					</div>
+			
+					<div class="field_label">
+						Parent Move:
+					</div>
+					<div class="field_value">
+						<% if @move.character != nil %>
+						<% parentId = @move.parent == nil ? nil : @move.parent.id %>
+						<%= form.select :parent_id, options_from_collection_for_select(@move.character.moves, 'id', 'name', parentId), { :include_blank => "None"} %>
+						<% else %>
+						<%= form.select :parent_id, options_from_collection_for_select(Character.find(params["char_id"]).moves, 'id', 'name', params["parent_move_id"]), {:include_blank => "None"} %>
+						<% end %>
+					</div>
+				
+					<div style="clear:both"></div>
+				</div>
+			
+				<div style="font-size:large;padding: 30px 10px;">
+					<div style="float:left; margin:10px">
+						<div class="field_label"> Name: </div> <div class ="field_value"> <%= form.text_field :name %> </div> 
+					</div>
+					<div class="field tooltip" style="float:left">
+						<span class="tooltiptext">
+							<div class="tooltipSection" style="float:left">
+							  	f: forward <br />
+								df: down forward  <br />
+								d: down  <br />
+								db: down back  <br />
+								b: back  <br />
+								ub: up back  <br />
+								u: up  <br />
+								uf: up forward  <br />
+							</div>
+							<div class="tooltipSection" style="float:left">
+							  	fp: hold forward<br />
+								dfp: hold down forward<br />
+								dp: hold down<br />
+								dbp: hold down back<br />
+								bp: hold back<br />
+								ubp: hold up back<br />
+								up: hold up<br />
+								ufp: hold up forward<br />
+							</div>
+							<div class="tooltipSection" style="float:left">
+								1: left puch<br />
+								2: right punch<br />
+								3: left kick<br />
+								4: right kick<br />
+								1+2: both punches<br />
+								2+3: right punch and left kick<br />
+								3+4: both kicks<br />
+								1+4: left punch and right kick<br />
+							</div>
+							<div class="tooltipSection" style="float:left">
+								n: neutral <br />
+							</div><div style="clear:both"></div>
+						</span>
+		
+						<div class="field_label"> Input: </div> <div class ="field_value"> <%= form.text_field :input %> </div> 
+					</div>
+					
+					<div style="float:left; margin:10px">
+						<div class="field_label"> Used For: </div> <div class="field_value">
+							<%= form.select :purpose_ids, options_from_collection_for_select(Purpose.all, 'id', 'name', @move.purpose_ids), {:include_blank => "None"}, :multiple => true %>
+						</div>
+					</div>
+					
+					<div style="float:left; margin:10px">
+						<div class="field_label"> Properties: </div> <div class="field_value">
+							<%= form.select :property_ids, options_from_collection_for_select(Property.all, 'id', 'name', @move.property_ids), {:include_blank => "None"}, :multiple => true %>
+						</div>
+					</div>
+					
+					<div style="clear:both"></div>
+				</div>
+			
+				<div style="clear:both"></div>
+				<div style="float:left"> 
+					<div class="field_container" style="float:left; margin-right:10px">
+						<div class="field_row">
+							<div class="field_label">
+								Hit Levels:
+							</div>
+							<div class="field_value">
+								<%= form.text_field :hit_level %>
+							</div>
+						</div>
+					
+						<div style="clear:both"></div>
+					
+						<div class="field_row">
+							<div class="field_label">
+								Hit Damage:
+							</div>
+							<div class="field_value">
+								<%= form.text_field :hit_damage %>
+							</div>
+						</div>
+						
+						<div class="field_row">
+							<div class="field_label">
+								Counter Hit Damage:
+							</div>
+							<div class="field_value">
+								<%= form.text_field :conter_hit_damage %>
+							</div>
+						</div>
+					
+						<div style="clear:both"></div>		 
+					</div>
+				
+					<div class="field_container" style="float:left">
+						<div class="field_label">
+							Cancel Input:
+						</div>
+						<div class="field_value">
+							<%= form.text_field :cancel_input %>
+						</div>
+						<div style="clear:both"></div>
+						<div class="field_label">
+							Transition To Stance:
+						</div>
+						<div class="field_value">
+							
+							<% if @move.character_id %>
+								<%= form.select :stance_transition_ids, options_from_collection_for_select(@move.character.stances, 'id', 'name', @move.stance_transition_ids), {:include_blank => "None"}, :multiple => true %>
+								
+							<% else %>
+							
+								<%= form.select :stance_transition_ids, options_from_collection_for_select(Character.find(params[:char_id]).stances, 'id', 'name'), {:include_blank => "None"}, :multiple => true %>
+								
+							<% end %>
+						</div>
+						<div style="clear:both"></div>
+					</div>
+				</div>
+				<div style="clear:both"></div>
+			</div>
+			<div class="field_container" style="float:right">
+				<div style="float:left;width:120px"> Startup: </div>
+				<div style="float:left"> <%= form.text_field :startup %> </div> 
+				<div style="clear:both"></div>
+				<div style="float:left;width:120px"> On Block: </div> 
+				<div style="float:left"> 
+					<div style="float:left">
+						<%= form.text_field :on_block %>
+					</div>
+					<div style="float:left">
+						<%= form.select :effects_block_ids, options_from_collection_for_select(MoveEffect.all, 'id', 'name', @move.effects_block_ids), {:include_blank => "None"}, :multiple => true %>
+					</div>
+				</div> 
+				<div style="clear:both"></div>
+			
+				<div style="float:left;width:120px"> On Hit: </div> 
+				<div style="float:left"> <%= form.text_field :on_hit %> </div>
+				<div>
+					<%= form.select :effects_hit_ids, options_from_collection_for_select(MoveEffect.all, 'id', 'name', @move.effects_hit_ids), {:include_blank => "None"}, :multiple => true %>
+				</div>
+				<div style="clear:both"></div>
+			
+				<div style="clear:both"></div>
+			
+				<div style="float:left;width:120px"> On Counter Hit: </div> 
+				<div style="float:left"> <%= form.text_field :on_counter_hit %> </div>
+				<div>
+					<%= form.select :effects_counter_hit_ids, options_from_collection_for_select(MoveEffect.all, 'id', 'name', @move.effects_counter_hit_ids), {:include_blank => "None"}, :multiple => true %>
+				</div>
+				<div style="clear:both"></div>
+			
+			</div>
+			<div style="clear:both"></div>
+		</div>
+		<div class="field_container" style="float:right">
+			<div style="float:left;width:120px"> Counter: </div>
+			<div style="float:left"> <%= form.text_field :counter %> </div>
+		</div>
+	    <div class="actions" style="float:right">
+			<% if @move.persisted? %>
+				<%= submit_tag 'Update' %>
+				<%= submit_tag 'Update and Add Another', name: 'update_and_add_new' %>
+				<%= submit_tag 'Update and Add Extension', name: 'update_and_add_extension' %>
+			<% else %>
+				<%= submit_tag 'Create' %>
+				<%= submit_tag 'Create and Add Another', name: 'create_and_add_new' %>
+				<%= submit_tag 'Create and Add Extension', name: 'create_and_add_extension' %>
+			<% end %>
+	    </div>
+		<div style="clear:both"></div>
+	<% end %>
+	<% if move.persisted? %>
+		<div style="padding:20px">
+			<%= render partial: 'components/moveView', locals:{ move: pm, show_paths: true } %>
+		</div>
+	<% end %>
+</div>
+
+<div class="import_moves">
+	<textarea style="width: 80%;margin-left: 10%;margin-right: 10%;height: 100px;"></textarea>
+</div>

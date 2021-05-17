@@ -1,0 +1,64 @@
+// Place all the styles related to the Posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+.format_button{
+	display: block;
+    float: left;
+    padding: 5px 5px;
+    margin: 5px;
+    background: #EEF;
+    filter: drop-shadow(0px 0px 3px #CCC);
+    text-align: center;
+    vertical-align: middle;
+}
+// Resources
+.resource_posts_container{
+	background:#FFF;
+	//padding:10px 0px 0px 0px;
+	margin:10px;
+	
+	border-radius:3px;
+	border: 1px solid #DDD;
+	
+	padding:0px;
+	width:90%;
+	margin:0 auto;
+	
+	position:relative;
+}
+.resource_posts_container:hover{
+	box-shadow: 3px 3px 4px -4px rgba(0, 0, 0, 0.5);
+}
+.resource_posts_title{
+	font-size:18px;
+	line-height:20px;
+	
+	padding: 30px 10px 0px 60px;
+	 
+}
+.resource_posts_user{
+	background:#BBC;
+	//color:#FFF;
+	border-radius:0px 0px 5px 5px;
+	padding: 5px 30px;
+}
+.post_title_value{
+	float:left;
+	font-family: 'Antonio', sans-serif !important;
+	font-size: 33px;
+	line-height: 40px;
+}
+.post_admin_options {
+	padding-left:10px;
+	font-size:12px;
+	float:left;
+}
+.post_title_link{
+	line-height: 60px;
+	margin: 20px;
+	font-size: x-large;
+	font-weight: 400;
+}
+.post_title_link:hover{
+	text-decoration:underline;
+}

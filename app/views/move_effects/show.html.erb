@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @move_effect.name %>
+</p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @move_effect.image_url %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @move_effect.desc %>
+</p>
+
+<%= link_to 'Edit', edit_move_effect_path(@move_effect) %> |
+<%= link_to 'Back', move_effects_path %>

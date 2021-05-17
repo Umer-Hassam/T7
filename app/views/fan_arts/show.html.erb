@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Link:</strong>
+  <img src="<%= @fan_art.link %>">
+</p>
+
+<p>
+  <strong>Artist name:</strong>
+  <%= @fan_art.artist_name %>
+</p>
+
+<p>
+  <strong>Artist link:</strong>
+  <%= @fan_art.artist_link %>
+</p>
+
+<p>
+  <strong>Art type:</strong>
+  <%= @fan_art.art_type %>
+</p>
+
+<p>
+  <strong>Style:</strong>
+  <%= @fan_art.style %>
+</p>
+
+<p>
+  <strong>Is main:</strong>
+  <%= @fan_art.is_main %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @fan_art.description %>
+</p>
+
+<%= link_to 'Edit', edit_fan_art_path(@fan_art) %> |
+<%= link_to 'Back', fan_arts_path %>

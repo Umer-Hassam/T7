@@ -1,0 +1,11 @@
+<p id="notice"><%= notice %></p>
+
+<div class="basic_info_title">General Guides</div>
+
+<div>
+	<div class="options_container">
+		<%= link_to "Create New Post", new_post_url(:post_type=>"G0"), {:class=>"button",:style=>"float: right;margin-right: 50px;"} %>
+	</div>
+	<%= render 'components/posts_list_view', :post_type=>"G0" %>
+</div>
+

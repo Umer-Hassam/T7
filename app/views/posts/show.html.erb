@@ -1,0 +1,12 @@
+<div class="character_info">
+	<div class="char_info_row_title">
+		<%= link_to @post.character.name, @post.character, {:class=>"post_title_link",:style=>"margin: 20px 0px;"}%>
+	</div>
+	<div class="clr"></div>
+</div>
+<p id="notice"><%= notice %></p>
+<h2 class="basic_info_title" style="text-align:center;font-size:35px;padding-top: 10px;margin-bottom: 0px;">
+  <%= @post.title %> | <%= link_to 'Edit', edit_post_path(@post) %>
+</h2>
+
+<%= render 'components/interpView', text: @post.details %>

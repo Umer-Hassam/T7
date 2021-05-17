@@ -1,0 +1,54 @@
+<div class="resource_posts_container" style="
+<% if defined?(size) && size == "small" %>
+max-height:250px;
+overflow:hidden;
+<% end %>
+">
+	<div style="padding: 20px 20px 40px 20px;">
+		<% text.split(Regexp.union(["[","]"])).each do |t| %>
+			<% if t.first == "@" %>
+				
+				<% id_arr = t.delete_prefix('@').split(',') %>
+				<% if id_arr.count > 1 %>
+				<% move = Move.where(id: id_arr[1], character_id:id_arr[0] ) %>
+				<% end %>
+				<% if move != nil %>
+					<%= render 'components/moveView', move: move.first, show_paths: false, size: "mini" %> 
+				<% end %>
+
+			<% elsif t.first == "$" %>
+				<% link = t.delete_prefix('$').split(",") %>
+				<a href="https://<%= link.last %>"><%= link.first %></a>
+			<% elsif t.first == ";" %>
+				<br />
+			<% elsif t.first == "*" %>
+				<% if t.delete_prefix('*').first == "b" %>
+					<b>
+				<% elsif t.delete_prefix('*').first == "h" %>
+					<h2 style="background: #EEF;padding: 10px 0px 10px 20px;margin: 10px -20px;">
+				<% end %>
+			<% elsif t.first == "/" %>
+				<% if t.delete_prefix('/').first == "b" %>
+					</b>
+				<% elsif t.delete_prefix('/').first == "h" %>
+					</h2>
+				<% end %>
+			<% elsif t.first == "%" %>
+				<div style="text-align: center;">
+					<% t.delete_prefix('%').split(",").each do |l| %>
+						<img src="<%=l%>" style="width:48%;height:auto" />
+					<% end %>
+				</div>
+			<% elsif t.first == "^" %>
+				<br />
+				<div style="text-align: center;">
+					<iframe src="https://www.youtube.com/embed/<%=t.delete_prefix('^')%>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:68%;height:auto"></iframe>
+				</div>
+			<% else %>
+				<%= t %>
+			<% end %>
+		<% end %>
+		<div style="clear:both;"></div>
+	</div>
+	<div class="resource_posts_user" style="background: #BBC;padding: 5px 20px;text-align:right;position: absolute;bottom: 0px;width: 96%;">by: Umer Hassam</div>
+</div>
