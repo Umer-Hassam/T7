@@ -11,6 +11,8 @@ class CreateCharacters < ActiveRecord::Migration[6.0]
       t.string :tier
       t.string :publish
       t.text :gameplay
+      t.text :strengths
+      t.text :weaknesses
 
       t.timestamps
     end

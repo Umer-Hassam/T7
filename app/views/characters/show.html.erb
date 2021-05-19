@@ -14,11 +14,13 @@
 			<div class="char_info_row_title">
 				<%= @character.name %>
 				<div class="Admin Links" style="font-size:10px;line-height: 10px;margin-top: -15px;">
+					<% if user_signed_in? %>
 					<div class="char_info_row_link">
 				  	  <%= link_to 'New Move', new_move_path(:char_id => @character.id) %> | 
 					  <%= link_to 'New Stance', new_stance_path(:char_id => @character.id) %> | 
 					  <%= link_to 'Edit', edit_character_path(@character) %>
 					</div>
+					<% end %>
 				</div>
 			</div>
 			<div class="char_info_row_links">
@@ -54,14 +56,12 @@
 				<div class="basic_info_title"> Punishment Guide </div>
 				<div style="padding:0px 10px">
 					<% @character.stances.each do |stance| %>
-
-						HERE: <%= stance.backup_moves %>
 						<div class="stance_container" id="<%= stance.name %>" stance="<%= stance.name %>">
 							<div class="stance_title hide_with" to_toggle="hideable_stance_<%= stance.id %>"> 
 								<%= stance.name %>
 							</div>
 							<div class="stance_moves_list<%= stance.name.downcase.tr(" ", "_") %> hideable_stance_<%= stance.id %>" >
-
+								<% if false %>
 								<% [10,11,12,13,14,15,16,17,18,19,20].each do |frame| %>
 									<% pm = stance.punisher_moves(frame) %>
 									<% if pm.count > 0 %>
@@ -72,7 +72,7 @@
 										<% end %>
 									<% end %>
 								<% end %>
-						
+								<% end %>
 							</div>
 						</div>
 					<% end %>
@@ -81,9 +81,7 @@
 			<div class="mc_3" prevent_toggle="true" starts_collapsed="true">
 				<div class="clr"></div>
 				<div class="basic_info_title" style="float:left"> Guides </div>
-				<div class="options_container" style="float:right;padding:20px 30px">
-					<%= link_to "Create New Post", new_post_url(:character_id=>@character.id, :post_type=>"C0"), {:class=>"button"} %>
-				</div>
+				
 				<div class="clr"></div>
 				<div class="">
 					<%= render 'components/posts_list_view', 
@@ -115,12 +113,12 @@
 				<div class="other_content_divs">
 					
 					<% def show_posts(post_type) %>
-						<div class="options_container">
-							<%= link_to "Create New Post", new_post_url(:character_id=>@character.id, :post_type=>post_type), {:class=>"button",:style=>"float: right;margin-right: 50px;"} %>
-						</div>
+						<% if false %>
 						<%= render 'components/posts_list_view', :char_id=>@character.id, :post_type=>post_type %>
+						<% end %>
 					<% end %>
 					
+
 					<div class="or_1" prevent_toggle="true"><%= show_posts("CO0")%></div>
 					<div class="or_2" prevent_toggle="true" starts_collapsed="true"><%= show_posts("CO1")%></div>
 					<div class="or_3" prevent_toggle="true" starts_collapsed="true"><%= show_posts("CO2")%></div>
@@ -252,15 +250,6 @@
 	</div>
 	
 </div>
-
-<%= form_for @character.stances.first, url: {:controller => "stances", action: "restore_moves", params: {id: @character.stances.first.id}}, method: :post do |f|%>
-
-<% res = @character.moves.where(:id => 258).first.backup_json %>
-<textarea style="width: 80%;margin-left: 10%;margin-right: 10%;height: 100px;">
-	<%= res %>
-</textarea>
-
-<%end%>
 
 <script>
 	$(document).ready(checkContainer);

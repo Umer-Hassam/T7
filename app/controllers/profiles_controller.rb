@@ -1,6 +1,8 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
-
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :show, :index]
+  
   # GET /profiles
   # GET /profiles.json
   def index

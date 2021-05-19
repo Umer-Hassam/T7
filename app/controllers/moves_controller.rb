@@ -1,5 +1,9 @@
  class MovesController < ApplicationController
   before_action :set_move, only: [:show, :edit, :update, :destroy]
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :index]
+
+  
 
   # GET /moves
   # GET /moves.json
@@ -50,6 +54,7 @@
       end
     end
     @on_counter_hit_moves = hit_mv_array
+
   end
 
   # GET /moves/new
@@ -69,12 +74,19 @@
       @move = Move.new
     end
       
-    
 
+    if params["parent_move_id"].blank?
+      @stance_id = params[:stance_id]
+    else
+      @stance_id = Move.find(params["parent_move_id"]).stance_id
+    end
+    
   end
 
   # GET /moves/1/edit
   def edit
+    @stance_id = @move.stance_id
+    @stance_id = params[:stance_id]
   end
 
   # POST /moves

@@ -11,6 +11,20 @@
     </div>
   <% end %>
 
+  <% if defined?(@move) %>
+  <% if @move.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@move.errors.count, "error") %> prohibited this stance from being saved:</h2>
+
+      <ul>
+        <% @move.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% end %>
+
   <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -35,3 +49,13 @@
     <%= form.submit %>
   </div>
 <% end %>
+
+<h1>Restore Form</h1>
+<%= form_for stance, url: {:controller => "stances", action: "restore_moves", params: {id: stance.id}}, method: :post do |f|%>
+
+<% moves_json = stance.backup_moves#stance.moves.first.backup_json#  %>
+<%= select_tag('selected_stance', options_from_collection_for_select(stance.character.stances.all, 'id', 'name', params[:id])) %>
+
+<%= text_area_tag(:moves_json, moves_json, size: '50x10') %>
+<%= f.submit "Submit" %>
+<%end%>

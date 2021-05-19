@@ -14,17 +14,19 @@
 	
 	z-index: 1;
 	
-	width:300px;
+	width:280px;
 }
 .gallery_image:hover .artist_credit {
 	display:block;
 }
 .gallery_image img {
 	width: 100%;
-	max-width: 300px;
+	max-width: 280px;
+	min-width:280px;
+
 	min-height: 180px;
-	min-width:300px;
 	max-height: 170px;
+
 	height: auto;
 	object-fit: cover;
 	object-position: 0% 0%;
@@ -74,4 +76,16 @@
 .artist_credit a {
 	font-size: 8px;
 	color:#E4E4F7 !important;
+}
+.art_container_action_show {
+	 padding:10px;
+	 margin:0 auto;
+	 width: 70%;
+	 text-align: center
+}
+.art_container_action_show img {
+	 padding:10px;
+	 margin:0 auto;
+	 width: 70%;
+	 text-align: center
 }

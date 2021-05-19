@@ -21,7 +21,7 @@
   <body>
 	  <div class="main_nav_bar">
 		  <div class="heading_div">
-		  	Tekken Master
+		  	<%= link_to "Tekken Master", root_path %>
 		  	<div class="tag_line">
 		  		Alpha v1.0
 		  	</div>
@@ -30,15 +30,66 @@
 			  <ul>
 				  <li> <%= link_to "Characters", characters_path %> </li>
 				  <li> <%= link_to "General Guides", posts_path %> </li>
+				  <% if user_signed_in? %>
 				  <li> <%= link_to "Move Effects", move_effects_path %> </li>
 				  <li> <%= link_to "Move Properties", properties_path %> </li>
 				  <li> <%= link_to "Move Purpose", purposes_path %> </li>
-				  <li> <%= link_to "Posts", posts_path %> </li>
+
+				  <li> <%= link_to "Logout", destroy_user_session_path, :method => :delete %> </li>
+				  
+				  <% else %>
+
+				  <li> <%= link_to "Login", new_user_session_path %> </li>
+
+				  <% end %>
+
 			  </ul>
 		  </div>
 		  <div class="clr"></div>
 	  </div>
 	  <%= yield %>
+
+	<div class="footer">
+	  	<div class="disclaimer">
+	  		<div class="disclaimer_heading"> 
+	  			DISCLAIMER 
+	  			<a href="www.twitter.com">Twitter</a> 
+	  			<a href="www.gmail.com">Gmail</a>
+	  			<% if false %>
+	  			<div class="contact_info">
+				  	<div class="footer_options">
+				  		<div class="contact_heading">Contacts:</div>
+				  		<div class="contact_options">
+				  			<a href="www.twitter.com">Twitter</a> <a href="www.gmail.com">Gmail</a>
+					  		<% if false %>
+					  		<ul>
+					  			<li>
+					  				<img src="https://img.icons8.com/color/48/000000/twitter-circled.png" 
+					  				style="height: 20px;" />
+					  			</li>
+					  			<li>
+					  				<img src="https://img.icons8.com/color/48/000000/gmail.png" style="
+					  				padding-top: 2px;"/>
+					  			</li>
+					  		</ul>
+					  		<% end %>
+					  	</div>	
+					  	<div class="clr"></div>
+			  		</div>
+			  		<div class="clr"></div>
+			  	</div>
+			  	<% end %>
+
+
+	  		</div>
+		  	<div class="disclaimer_text">
+		  		All Rights are owned by the respective owners; I have not created, nor do I own the game, any art showcased on this website or any other information provided herein. I try to provide proper attribution whereever possible but if I have missed anything feel free to let me know via twitter or my email address and I will either provide the attribution or remove the asset as per the request of the owner. This is a non-commercial fan site and I would like to thank anyone who chooses to contribute in any way at all. Thankyou for making the Tekken community a little better.
+		  	</div>
+		  	<div class="clr"></div>
+		</div>
+		 
+	</div>
+
   </body>
 	
 </html>

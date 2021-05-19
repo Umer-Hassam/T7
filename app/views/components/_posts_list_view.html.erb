@@ -8,6 +8,12 @@
 		<% posts = character.posts.where(post_type: post_type) %>
 	<% end %>
 	
+	<% if user_signed_in? %>
+	<div class="options_container" style="float:right;padding:20px 30px">
+		<%= link_to "Create New Post", new_post_url(:character_id=>character.id, :post_type=>post_type), {:class=>"button"} %>
+	</div>
+	<% end %>
+	
 	<% posts.each do |post| %>
 	<% if defined?(display_type) && display_type == "mini" %>
 	
@@ -15,9 +21,13 @@
 			<div class="post_title_value">
 				<%= link_to post.title, post, {:class=>"post_title_link"} %>
 			</div>
+
+			<% if user_signed_in? %>
 			<div class="post_admin_options">
 				( <%= link_to "Edit", edit_post_path(post), { :style=>"line-height: 45px;"} %> )
 			</div>
+			<%end%>
+
 			<div class="clr"></div>
 			<div class="resource_posts_user" style="text-align:right">
 				By: Umer Hassam
@@ -29,9 +39,13 @@
 			<div class="post_title_value">
 				<%= post.title %>
 			</div>
+			
+			<% if user_signed_in? %>
 			<div class="post_admin_options">
 				( <%= link_to "Edit", edit_post_path(post) %> )
 			</div>
+			<% end %>
+
 			<div class="clr"></div>
 		</div>
 		<%= render 'components/interpView', text: post.details, size:"small" %>

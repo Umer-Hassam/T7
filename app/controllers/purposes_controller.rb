@@ -1,6 +1,8 @@
 class PurposesController < ApplicationController
   before_action :set_purpose, only: [:show, :edit, :update, :destroy]
-
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :show, :index]
+  
   # GET /purposes
   # GET /purposes.json
   def index

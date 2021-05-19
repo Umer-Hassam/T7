@@ -2,9 +2,9 @@
 	<div class="gallery_image">
 		<% if defined?(open_on_click) %>
 		
-			<%= link_to image do %>
-			   <%= image_tag image.link, { :style => image.style } %>
-			<% end %>
+		<%= link_to image do %>
+		   <%= image_tag image.link, { :style => image.style } %>
+		<% end %>
 		
 		
 		<% else %>
@@ -12,10 +12,11 @@
 			<img src="<%= image.link %>" style="<%= image.style %>">
 		
 		<% end %>
-		
+		<% if user_signed_in? %>
 		<div class="image_admin_options">
 			<%= link_to 'Edit', edit_fan_art_path(image) %>
 		</div>
+		<% end %>
 		<%if !image.artist_name.empty? %>
 		<div class="artist_credit">
 			<span> 

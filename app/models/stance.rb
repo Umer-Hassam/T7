@@ -1,14 +1,20 @@
 class Stance < ApplicationRecord
+  before_destroy :destroy_associated_moves
+
   belongs_to :character
   has_many :moves
   
   has_many :stance_transitions, through: :moves, :class_name => Move.to_s
   
+  def destroy_associated_moves
+    self.moves.destroy_all
+  end
+
   def parent_moves
     Move.sort_by_priority_array(moves.select {|move| move.parent == nil }.to_a, Move.input_priority_array)
   end
   def child_moves
-    Move.sort_by_priority_array(moves.select {|move| move.extensions.count <= 0 || !move.cancel_input.empty?}.to_a, Move.input_priority_array)
+    Move.sort_by_priority_array(moves.select {|move| move.extensions.count <= 0 || !move.cancel_input.blank?}.to_a, Move.input_priority_array)
   end
   def punisher_moves(startup)
     # get all parent moves that have same frame startup as provided
@@ -80,51 +86,17 @@ class Stance < ApplicationRecord
   #   arr_temp
   # end
 
+  
   def backup_moves
     json_strings = []
-    moves.each do |move|
-      json_strings << move.backup_json
+    parent_moves.each do |move|
+      json_strings << move.backup_dict.to_json
     end
     return "[" + json_strings.join(",") + "]"
   end
 
-  def self.restore(json_string)
-    bb = JSON.parse json_string
-
-    move = Move.create(
-      :input => bb["input"], 
-      :name => bb["name"],
-
-      #:stance => ["stance"],
-      #:parent => ["parent"],
-      :cancel_input => bb["cancel_input"],
-
-      #Frames
-      :startup => bb["startup"],
-      :on_block => bb["on_block"],
-      :on_hit => bb["on_hit"],
-      :on_counter_hit => bb["on_counter_hit"],
-      
-      #damage info
-      :hit_damage =>        bb["hit_damage"],
-      :conter_hit_damage => bb["conter_hit_damage"],
-      :hit_level =>         bb["hit_level"],
-
-      #:counter => counter,
-
-      #:move_purpose => MovePurpose.where('lower(name) = ?', bb["move_purpose"][0].downcase).first,
-      #:properties =>   properties.map { |p| p.name },
-
-      #:effects_hit =>         effects_hit.map { |p| p.name },
-      #:effects_counter_hit => effects_counter_hit.map { |p| p.name },
-      #:effects_block =>       effects_block.map { |p| p.name },
-      )
-  
-    if !bb["stance"].empty?
-      move.stance = Stance.where('lower(name) = ?', bb["stance"].downcase).first
-    end
-  
-    #byebug
+  def restore(json_string)
+    
     
   end
 end

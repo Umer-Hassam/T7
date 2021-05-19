@@ -57,6 +57,8 @@
 			<div class="move_col move_title">
 				<%= link_to move.name, move %>
 			</div>
+
+			<% if user_signed_in? %>
 			<div class="move_col admin_options">
 				<div style="float:left">
 					<%= link_to 'Edit', edit_move_path(move) %> | 
@@ -71,7 +73,8 @@
 				
 				<div class="clr"></div>
 			</div>
-
+			<% end %>
+			
 			<div class="move_col move_purposes">
 
 				<% move.purposes.each do |p| %>
@@ -117,16 +120,16 @@
 					<div class="move_row" style="line-height: 26px">
 						x
 					</div>
-					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true" style="height:20px">
 						Hit Damage
 					</div>
-					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true" style="height:20px">
 						CH Damage
 					</div>
-					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true" style="height:20px">
 						Startup
 					</div>
-					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true">
+					<div class="move_row hideable_<%= move.id %>" starts_collapsed="true" style="height:20px">
 						On Block
 						<span class="property_jails"><%= move.jails_on_block? ? "(Jails)" : ""  %></span>
 					</div>
@@ -138,6 +141,7 @@
 						On Counter Hit
 						<span  class="property_jails"><%= move.jails_on_counter_hit? ? "(Jails)" : ""  %></span>
 					</div>
+					<div class="clr"></div>
 			</div>
 			<!-- This column loops through all the values and create columns for each input -->
 			<div class="move_col">
@@ -169,27 +173,27 @@
 						</div>
 						
 						<!-- Hit Damage -->
-						<div class="move_row hideable_<%= move.id %> hidden">
+						<div class="move_row hideable_<%= move.id %> hidden" style="height:20px">
 							<%= input.hit_damage == "" ? "x" : input.hit_damage %>
 						</div>
 						
 						<!-- Counter Hit Damage -->
-						<div class="move_row hideable_<%= move.id %>">
+						<div class="move_row hideable_<%= move.id %>" style="height:20px">
 							<%= input.conter_hit_damage == "" ? "x" : input.conter_hit_damage %>
 						</div>
 						
 						<!-- Startup Frames -->
-						<div class="move_row hideable_<%= move.id %>">
+						<div class="move_row hideable_<%= move.id %>" style="height:20px">
 							<%= input.startup == "" ? "x" : input.startup %>
 						</div>
 						
 						<!-- Block Frames -->
-						<div class="move_row hideable_<%= move.id %>">
+						<div class="move_row hideable_<%= move.id %>" style="height:20px">
 							<%= input.on_block == "" ? "x" : input.on_block %>
 						</div>
 						
 						<!-- Hit Frames and Effects -->
-						<div class="move_row hideable_<%= move.id %>">
+						<div class="move_row hideable_<%= move.id %>" style="height:20px">
 						
 							<% effects = input.hit_effects_presentable_strings - ["Jails", ""] %>
 							
@@ -209,7 +213,7 @@
 						</div>
 						
 						<!-- Counter Hit Frames and Effects -->
-						<div class="move_row hideable_<%= move.id %>">
+						<div class="move_row hideable_<%= move.id %>" style="height:20px">
 						
 							<% effects = input.counter_hit_effects_presentable_strings - ["Jails", ""] %>
 							<% if effects.count <= 0 %>
@@ -233,7 +237,7 @@
 				<!-- Column for Cancel Input if provided -->
 				<% if move.cancel_input != nil %>
 				<div class="move_col">
-					<%= render 'components/inputView', message: move.cancel_input, size:30 %>
+					(Cancel with)<%= render 'components/inputView', message: move.cancel_input, size:30 %>
 				</div>
 				<% end %>
 				

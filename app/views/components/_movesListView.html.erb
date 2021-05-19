@@ -77,9 +77,16 @@
 					<div class="stance_container" id="<%= stance.name %>" stance="<%= stance.name %>">
 						<div class="stance_title hide_with" to_toggle="hideable_stance_<%= stance.id %>"> 
 							<%= stance.name %> 
-							<span style="font-size:16px">
-								(<%= stance.child_moves.count %> moves)
+							<% if user_signed_in? %>
+							<span style="font-size:12px">
+								( 
+								<%= link_to 'New Move', new_move_path(:char_id => @character.id, :stance_id => stance.id) %> | 
+								<%= link_to 'Edit Stance', edit_stance_path(stance) %> |
+        						<%= link_to 'Delete Stance', stance, method: :delete, data: { confirm: 'Are you sure?'} %> |
+        						<%= link_to 'Destroy All Moves',  :controller => "stances", :id => stance.id, :action => "destroy_all_moves" %> |
+        						<%= link_to 'Backup', :controller => "stances", :id => stance.id, :action => "backup_all_moves" %>)
 							</span>
+							<% end %>
 						</div>
 						<div class="stance_moves_list<%= stance.name.downcase.tr(" ", "_") %> hideable_stance_<%= stance.id %>" >
 

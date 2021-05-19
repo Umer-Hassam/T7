@@ -1,6 +1,14 @@
 class CharactersController < ApplicationController
   before_action :set_character, only: [:show, :edit, :update, :destroy]
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy]
 
+  before_action :check_character_status, :only => [:show]
+
+  def check_character_status
+    redirect_to(root_path) unless (@character.publish.to_i == 1 || user_signed_in?)
+  end
+  
   # GET /characters
   # GET /characters.json
   def index

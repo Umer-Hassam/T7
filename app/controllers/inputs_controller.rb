@@ -1,6 +1,9 @@
 class InputsController < ApplicationController
   before_action :set_input, only: [:show, :edit, :update, :destroy]
 
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :show, :index]
+  
   # GET /inputs
   # GET /inputs.json
   def index

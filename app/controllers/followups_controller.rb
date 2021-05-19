@@ -1,6 +1,9 @@
 class FollowupsController < ApplicationController
   before_action :set_followup, only: [:show, :edit, :update, :destroy]
 
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :show, :index]
+
   # GET /followups
   # GET /followups.json
   def index

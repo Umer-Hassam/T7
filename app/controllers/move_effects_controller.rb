@@ -1,6 +1,9 @@
 class MoveEffectsController < ApplicationController
   before_action :set_move_effect, only: [:show, :edit, :update, :destroy]
 
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy, :show, :index]
+
   # GET /move_effects
   # GET /move_effects.json
   def index

@@ -1,9 +1,25 @@
+
 <p id="notice"><%= notice %></p>
 
-<div class="main_container" style="padding:50px">
+<div class="main_container">
 	
 	<div class="page_title">Choose Your Character</div>
-	<div class=""><%= link_to 'New Character', new_character_path, {:class=>"button"}%></div>
+
+	<div class="character_filter_options">
+		<input type="text" id="search_box" onkeyup="myFunction()" placeholder="Search names or input" class="filter_text_field">
+		<%if false %>
+		<%= select_tag("sort_select", options_for_select(["Sort by Name","Sort by Tier","Sort by Archetype","Sort by Difficulty"]), :class=>"filter_select" ) %>
+		<% end %>
+		<%# select_tag("difficulty_select", options_for_select(["1","2","3","4","5"]), :prompt => "Difficulty", :class=>"filter_select" ) %>
+
+		<%# select_tag("tier_select", options_for_select(["S++","S+","S","A","B","C"]), :prompt => "Tier", :class=>"filter_select" ) %>
+
+		<%# select_tag("arcehtype_select", options_for_select(["Mishima", "Mixup","Rushdown","Oppression","Meter","Confusion","Poking","Keep Out"]), :prompt => "Archetype", :class=>"filter_select" ) %>
+	</div>
+	
+	<% if user_signed_in? %>
+		<div class=""><%= link_to 'New Character', new_character_path, {:class=>"button"}%></div>
+	<% end %>
 
 	<div class="characters_container">
 		
@@ -33,21 +49,25 @@
 						<%= character.archetype %>
 					</div>
 					<div class="name_value_div">
-						<% if character.publish.to_i == 1 %>
+						<% if character.publish.to_i == 1 || user_signed_in? %>
 							<%= link_to character.name, character %>
 						<% else %>
 							<%= link_to character.name, "#", data: { confirm: 'This character has not yet been implemented. Thankyou for your patience.' } %>
 						<% end %>
 					</div>
-					<div class="name_value_div" style="padding-top:10px">
+					<div class="archetype_value_div" style="padding-top:10px">
 						(<%= character.fighting_style %>)
 					</div>
 					<!--<a href="<%= character.wiki_link %>">(wiki)</a>-->
 				</div>
+				
+				<% if user_signed_in? %>
 				<div class="character_actions">
 					<%= link_to 'Edit', edit_character_path(character) %> |
 					<%= link_to 'Destroy', character, method: :delete, data: { confirm: 'Are you sure?' } %>
 				</div>
+				<% end %>
+
 				<div class="character_desc">
 					<%= character.gameplay %>
 				</div>
@@ -92,5 +112,37 @@
 	</div>
 </div>
 
-<%= render 'components/interpView', text: "[*h]this is a test text.[/h] move below: [@3] this move is considered one of the best moves in the game because it allowes the user to go to his home and bring a bazooka to desctroy everything. also in order to counter the user you must use the following move [@6] [*b]and finally a video to prove it:[/b] [^6L8ZB7blOW8] The older raiden only figured out his folly because he saw up his [*b]ass:[/b] [%https://www.destructoid.com/ul/591403-fujin-trailer-mk-11-aftermath.jpg,https://i2-prod.dailystar.co.uk/tech/gaming/article21977988.ece/ALTERNATES/s1200c/0_Mortal-Kombat-11.jpg,
+<script>
+	// This method makes the search bar work
+	function myFunction() {
+		
+		// Declare variables
+		var input, filter, ul, li, a, i, txtValue;
+		input = document.getElementById('search_box');
+		filter = input.value.toUpperCase();
+		
+		var parent_div = $('.characters_container:visible')[0]
+		move_div = $(parent_div).find(".name_value_div")
+
+		// Loop through all list items, and hide those who don't match the search query
+		for (i = 0; i < move_div.length; i++) {
+			
+			txtValue = move_div[i].textContent || move_div[i].innerText;
+			
+			inputValue = $(move_div[i])//.parentElement.parentElement.attr('input');
+			iv = inputValue.text();//inputValue[0].parentElement.parentElement).attr('input')
+			
+			if (txtValue.toUpperCase().indexOf(filter) > -1 || iv.toUpperCase().startsWith(filter)) {
+				
+				move_div[i].parentElement.parentElement.style.display = "block";
+				$(move_div[i].parentElement.parentElement).css('padding-left','0px');
+			} else {
+				console.log("OH");
+				move_div[i].parentElement.parentElement.style.display = "none";
+			}
+		}
+	}
+</script>
+
+<%# render 'components/interpView', text: "[*h]this is a test text.[/h] move below: [@3] this move is considered one of the best moves in the game because it allowes the user to go to his home and bring a bazooka to desctroy everything. also in order to counter the user you must use the following move [@6] [*b]and finally a video to prove it:[/b] [^6L8ZB7blOW8] The older raiden only figured out his folly because he saw up his [*b]ass:[/b] [%https://www.destructoid.com/ul/591403-fujin-trailer-mk-11-aftermath.jpg,https://i2-prod.dailystar.co.uk/tech/gaming/article21977988.ece/ALTERNATES/s1200c/0_Mortal-Kombat-11.jpg,
 https://cdn-prod.mortalkombat.com/static/share.jpg] [;] source: [$Albert Einstine,http://www.alberteinstine.com] this is me"%>

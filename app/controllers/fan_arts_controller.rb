@@ -1,6 +1,8 @@
 class FanArtsController < ApplicationController
   before_action :set_fan_art, only: [:show, :edit, :update, :destroy]
-
+  # DEVISE CHECK
+  before_action :authenticate_user!, :only => [:new, :edit, :create, :destroy]
+  
   # GET /fan_arts
   # GET /fan_arts.json
   def index

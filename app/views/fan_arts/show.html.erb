@@ -1,19 +1,14 @@
 <p id="notice"><%= notice %></p>
+<div class="art_container_action_show">
+  <p>
+  <b> Artist: </b> <%= link_to @fan_art.artist_name,  @fan_art.artist_link %> <br />
+  </p>
+  <%= link_to @fan_art.link do %>
+     <%= image_tag @fan_art.link %>
+  <% end %>
+</div>
 
-<p>
-  <strong>Link:</strong>
-  <img src="<%= @fan_art.link %>">
-</p>
-
-<p>
-  <strong>Artist name:</strong>
-  <%= @fan_art.artist_name %>
-</p>
-
-<p>
-  <strong>Artist link:</strong>
-  <%= @fan_art.artist_link %>
-</p>
+<% if user_signed_in? %>
 
 <p>
   <strong>Art type:</strong>
@@ -37,3 +32,5 @@
 
 <%= link_to 'Edit', edit_fan_art_path(@fan_art) %> |
 <%= link_to 'Back', fan_arts_path %>
+
+<%end%>

@@ -1,4 +1,31 @@
 class Move < ApplicationRecord
+  validate :custom_validation
+  
+  before_destroy :destroy_extensions
+
+  private def custom_validation
+    if !self.parent.blank?
+      if (self.parent.extensions.select { |m| m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input}.count > 0 )
+        self.errors[:base] << "Another Extensions of this moves parent already has the same input and the cancel input. This is not allowed"
+      end
+
+      if self.parent.stance_id != self.stance_id
+        self.errors[:base] << "Stance must be the same as parent move. Parent's Stance: #{self.parent.stance.name}"
+      end
+
+    else
+      
+      if (self.stance.moves.select { |m| m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input}.count > 0 )
+        self.errors[:base] << "Another move already has the same input and the cancel input. This is not allowed."
+      end
+    end
+    
+  end
+
+  def destroy_extensions
+    self.extensions.destroy_all
+  end
+
   belongs_to :character
   
   # STANCES
@@ -234,13 +261,13 @@ class Move < ApplicationRecord
     arr_temp
   end
   
-  def backup_json
-
+  def backup_dict()
+    
     dict = {
       :input => input, 
       :name => name,
 
-      :stance => stance.name,
+      #:stance => stance.name,
       :parent => parent == nil ? "" : parent.input,
       :cancel_input => cancel_input,
 
@@ -265,7 +292,25 @@ class Move < ApplicationRecord
       :effects_block =>       effects_block.map { |p| p.name },
 
     }
-    return dict.to_json
+
+    if extensions.blank? 
+      
+      return dict
+      
+    else
+      
+      ext_json_array = []
+
+      extensions.each do |extension|
+         ext_json_array << extension.backup_dict
+      end
+      
+      dict[:child_moves] = ext_json_array
+      return dict
+
+    end
+
+    
 
   end
 end

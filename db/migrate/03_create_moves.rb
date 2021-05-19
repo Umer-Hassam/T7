@@ -20,6 +20,8 @@ class CreateMoves < ActiveRecord::Migration[6.0]
       
       t.string :type
       t.text :counter
+      t.text :explaination
+
       t.integer :character_id
       
       t.references :parent

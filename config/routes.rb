@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     collection do
       post :restore_moves
       post 'stances/:id' => 'stances#restore_moves'
+      get 'stances/:id' => 'stances#backup_all_moves'
+      get ':id' => 'stances#destroy_all_moves'
     end
   end
 

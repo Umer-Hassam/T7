@@ -80,9 +80,12 @@
 					</div>
 					<div class="field_value">
 						<% if @move.character_id %>
-						<%= form.select :stance_id, options_from_collection_for_select(@move.character.stances, 'id', 'name', @move.stance_id) %>
+						
+						<%= form.select :stance_id, options_from_collection_for_select(@move.character.stances, 'id', 'name', @stance_id) %>
 						<% else %>
-						<%= form.select :stance_id, options_from_collection_for_select(Character.find(params[:char_id]).stances, 'id', 'name') %>
+
+
+						<%= form.select :stance_id, options_from_collection_for_select(Character.find(params[:char_id]).stances, 'id', 'name', @stance_id) %>
 						<% end %>
 					</div>
 			
