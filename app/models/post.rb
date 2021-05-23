@@ -1,6 +1,6 @@
 class Post < ApplicationRecord
   belongs_to :user
-  belongs_to :character
+  belongs_to :character, optional: true
   
   # POST TYPES
   # G0: General Guides

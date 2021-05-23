@@ -1,6 +1,8 @@
 <div class="character_info">
 	<div class="char_info_row_title">
+		<% if !@post.character.blank? %>
 		<%= link_to @post.character.name, @post.character, {:class=>"post_title_link",:style=>"margin: 20px 0px;"}%>
+		<% end %>
 	</div>
 	<div class="clr"></div>
 </div>

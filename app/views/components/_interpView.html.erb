@@ -1,10 +1,10 @@
 <div class="resource_posts_container" style="
 <% if defined?(size) && size == "small" %>
-max-height:250px;
+max-height:130px;
 overflow:hidden;
 <% end %>
 ">
-	<div style="padding: 20px 20px 40px 20px;">
+	<div>
 		<% text.split(Regexp.union(["[","]"])).each do |t| %>
 			<% if t.first == "@" %>
 				
@@ -25,7 +25,7 @@ overflow:hidden;
 				<% if t.delete_prefix('*').first == "b" %>
 					<b>
 				<% elsif t.delete_prefix('*').first == "h" %>
-					<h2 style="background: #EEF;padding: 10px 0px 10px 20px;margin: 10px -20px;">
+					<h2>
 				<% end %>
 			<% elsif t.first == "/" %>
 				<% if t.delete_prefix('/').first == "b" %>
@@ -50,5 +50,5 @@ overflow:hidden;
 		<% end %>
 		<div style="clear:both;"></div>
 	</div>
-	<div class="resource_posts_user" style="background: #BBC;padding: 5px 20px;text-align:right;position: absolute;bottom: 0px;width: 96%;">by: Umer Hassam</div>
+	<div class="resource_posts_user">by: Umer Hassam</div>
 </div>

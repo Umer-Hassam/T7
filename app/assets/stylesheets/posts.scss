@@ -13,40 +13,55 @@
 }
 // Resources
 .resource_posts_container{
-	background:#FFF;
+	//background:#FFF;
 	//padding:10px 0px 0px 0px;
 	margin:10px;
 	
-	border-radius:3px;
-	border: 1px solid #DDD;
+	//border-radius:3px;
+	//border: 1px solid #DDD;
 	
 	padding:0px;
 	width:90%;
 	margin:0 auto;
 	
 	position:relative;
+
+	//padding: 0px 20px 40px 20px;
 }
+.resource_posts_container h2 {
+	margin-bottom:10px
+}
+
 .resource_posts_container:hover{
-	box-shadow: 3px 3px 4px -4px rgba(0, 0, 0, 0.5);
+	//box-shadow: 3px 3px 4px -4px rgba(0, 0, 0, 0.5);
 }
 .resource_posts_title{
 	font-size:18px;
 	line-height:20px;
 	
-	padding: 30px 10px 0px 60px;
+	padding: 50px 10px 0px 60px;
 	 
 }
 .resource_posts_user{
-	background:#BBC;
-	//color:#FFF;
-	border-radius:0px 0px 5px 5px;
-	padding: 5px 30px;
+	background: #f1f4f8;
+	padding: 2px 10px 2px 0px;
+	text-align: right;
+	position: absolute;
+	bottom: 0px;
+	width: 99%;
+	border-bottom: 0.1px solid #AAA;
 }
 .post_title_value{
 	float:left;
-	font-family: 'Antonio', sans-serif !important;
+	//font-family: 'Antonio', sans-serif !important;
 	font-size: 33px;
 	line-height: 40px;
+
+	margin-bottom: -5px;
+	z-index: 1;
+	position: relative;
+
+	color: #364650;
 }
 .post_admin_options {
 	padding-left:10px;

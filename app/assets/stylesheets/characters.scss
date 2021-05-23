@@ -153,8 +153,7 @@ background: #ACF;
 	font-size: 16px;
 }
 .characters_container {
-//	padding:20px;
-	margin-top:35px;
+	margin-top:10px;
 	display:grid;
 	justify-items: center;
 	align-items: center;
@@ -336,16 +335,74 @@ line-height: 57px !important;
 	font-size: 25px;
 }
 .properties_section_heading{
-	background: #DDF;
+	background: #BBC;
 	padding: 10px 20px;
 	/* font-weight: bold; */
 	font-size: 20px;
-	/* color: #FFF; */
+	color: #FFF;
 }
 .properties_section_row{
 	background: #EEF;
 	padding: 5px 10px;
 }
+.properties_section_card{
+	//float: left;
+    
+    //padding: 5px 10px;
+    //min-width: 300px;
+    //border: 1px solid;
+    border-radius: 6px;
+    //margin: 10px;
+    
+    text-align: center;
+    background: #FFF;
+    box-shadow: 0 2px 4px -4px black;//rgb(0 0 0 / 50%);
+    overflow: hidden;
+    border: 1px solid #ddd;
+    //max-width: 280px;
+    //min-width: 280px;
+
+    margin-top: 8px;
+	vertical-align: middle;
+	width: 100%;
+
+	padding-bottom: 10px;
+}
+.properties_section_card_container{
+	display:grid;
+
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0 14px;
+}
+.properties_col {
+	flex: 35%;
+	max-width: 24%;
+	padding: 0 4px;
+}
+/* Responsive layout - makes a two column-layout instead of four columns */
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 1080px) {
+  .properties_col {
+    max-width: 32%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .properties_col {
+    max-width: 48%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .properties_col {
+  	flex:100%;
+    max-width: 96%;
+    //background:green;
+  }
+}
+
 .basic_info_title{
 	font-size: 60px;
 	line-height: 40px;
@@ -353,14 +410,25 @@ line-height: 57px !important;
 	color: #CCC;
 	font-weight: 100;
 }
+.properties_section_main_title{
+	margin: -5px -10px 10px -11px;
+	min-width: 100px;
+	background: #BBC;
+	padding: 9px 0px;
+	color: #FFF;
+	font-size: 18px;
+}
 .properties_section_title{
-	float:left;
+	float: left;
 	font-weight: bold;
 	margin: 3px 5px 3px 5px;
-	min-width:100px;
+	min-width: 50%;
+	font-family: 'Antonio', sans-serif !important;
+	text-align: right;
 }
 .prop_section_value{
     float: left;
-    margin: 3px 5px 3px 5px;
-	width: 80%;
+	margin: 3px 5px 3px 5px;
+	width: 40%;
+	text-align: left;
 }

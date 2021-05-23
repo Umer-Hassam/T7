@@ -22,6 +22,9 @@ body{
 	font-family: 'Roboto', sans-serif;
 //	font-weight: 100;
 }
+.body_content_wrapper{
+	min-height:70vh;
+}
 #notice { margin:0px;}
 a {
 	color: #000;
@@ -40,10 +43,16 @@ a:visited {
 	background-color:rgba(0,0,0,0.0);
 }
 
+.form_wrapper {
+	margin: 0 auto;
+	max-width: 40%;
+	min-width: 40%;
+	margin-top:20px;
+}
 form{
-	//float:left;
+	padding-top:30px;
     background-color: #EEE;
-    margin: 0 auto;//10px;
+    
     border-radius: 6px;
     text-align: center;
 	background: #FFF;
@@ -51,8 +60,10 @@ form{
 	overflow:hidden;
 	border: 1px solid #ddd;
 	
-	max-width: 280px;
-	min-width: 280px;
+	
+
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 .field {}
 .field input {
@@ -86,6 +97,25 @@ form{
 	font-family: 'Roboto', sans-serif;
 	font-weight: lighter;
 	font-size: 16px;
+}
+form h2 {
+	color: #364650;
+	font-family: 'Antonio', sans-serif !important;
+    font-size: 26px !important;
+}
+form .form_button {
+	height: 40px;
+    width: 100%;
+    border: 0px;
+    background: #364650;
+    font-family: 'Antonio', sans-serif !important;
+    font-size: 16px !important;
+    color: #FFF;
+    border-radius: 0px 0px 6px 6px;
+}
+.actions {
+	padding: 0px;
+    margin: 0px !important;
 }
 .button {
 	padding: 10px;
@@ -162,6 +192,7 @@ form{
 	color: #FFF;
 
 	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.7);
+	margin-top: 30px;
 }
 .disclaimer_heading{
 	font-family: 'Antonio', sans-serif !important;

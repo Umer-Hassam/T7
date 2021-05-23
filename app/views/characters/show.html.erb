@@ -34,6 +34,7 @@
 					<li class="hide_with" to_toggle="mc_3" tab_id="menu_char_list">
 						Guides
 					</li>
+
 					<li class="hide_with" to_toggle="mc_4" tab_id="menu_char_list">
 						Other Resources
 					</li>
@@ -61,8 +62,8 @@
 								<%= stance.name %>
 							</div>
 							<div class="stance_moves_list<%= stance.name.downcase.tr(" ", "_") %> hideable_stance_<%= stance.id %>" >
-								<% if false %>
-								<% [10,11,12,13,14,15,16,17,18,19,20].each do |frame| %>
+								
+								<% [10,11,12,13,14,15].each do |frame| %>
 									<% pm = stance.punisher_moves(frame) %>
 									<% if pm.count > 0 %>
 										<h3>-<%= frame %> Moves</h3>
@@ -72,7 +73,7 @@
 										<% end %>
 									<% end %>
 								<% end %>
-								<% end %>
+								
 							</div>
 						</div>
 					<% end %>
@@ -83,9 +84,8 @@
 				<div class="basic_info_title" style="float:left"> Guides </div>
 				
 				<div class="clr"></div>
-				<div class="">
-					<%= render 'components/posts_list_view', 
-				:char_id=>@character.id, :post_type=>"C0", :display_type=>"mini" %>
+				<div>
+					<%= render 'components/posts_list_view', :char_id=>@character.id, :post_type=>"C0", :display_type=>"mini" %>
 				</div>
 			</div>
 			<div class="mc_4" prevent_toggle="true" starts_collapsed="true">
@@ -113,9 +113,7 @@
 				<div class="other_content_divs">
 					
 					<% def show_posts(post_type) %>
-						<% if false %>
 						<%= render 'components/posts_list_view', :char_id=>@character.id, :post_type=>post_type %>
-						<% end %>
 					<% end %>
 					
 
@@ -135,7 +133,7 @@
 							Counter Rules
 						</div>
 						<div class="properties_section_row">
-							<div class="properties_section_title">Side Step Direction: </div>
+							<div class="properties_section_title" style="min-width:100px">Side Step Direction: </div>
 							<div class="prop_section_value">
 								<% left_count  = @character.moves.select{|m|m.track_direction == "Left"}.count %>
 								<% right_count = @character.moves.select{|m|m.track_direction == "Right"}.count %>
@@ -156,7 +154,7 @@
 							<div style="clear:both"></div>
 						</div>
 						<div class="properties_section_row">
-							<div class="properties_section_title">Duckable Moves: </div>
+							<div class="properties_section_title" style="min-width:100px">Duckable Moves: </div>
 							<div class="prop_section_value">
 								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["H","h","High","high","L","l","Low","low"]).any?}.count %> 
 								out of
@@ -165,9 +163,43 @@
 							<div style="clear:both"></div>
 						</div>
 						<div class="properties_section_row">
-							<div class="properties_section_title">Gameplay: </div>
-							<div class="prop_section_value">
+							<div class="properties_section_title" style="min-width:100px">Gameplay: </div>
+							<div class="prop_section_value" style="min-width:80%">
 								<%= @character.gameplay %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+
+						<div class="properties_section_row">
+							<div class="properties_section_title" style="min-width:100px">Strengths: </div>
+							<div class="prop_section_value" style="min-width:80%">
+								<%= @character.strengths %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+
+						<div class="properties_section_row">
+							<div class="properties_section_title" style="min-width:100px">Weaknesses: </div>
+							<div class="prop_section_value" style="min-width:80%">
+								<%= @character.weaknesses %>
+							</div>
+							<div style="clear:both"></div>
+						</div>
+
+						<div class="properties_section_row">
+							<div class="properties_section_title" style="min-width:100px">Movement: </div>
+							<div class="prop_section_value" style="max-width:50px">
+								<%= @character.movement %>
+							</div>
+
+							<div class="properties_section_title" style="min-width:100px">Tier Placement: </div>
+							<div class="prop_section_value" style="max-width:50px">
+								<%= @character.tier %>
+							</div>
+
+							<div class="properties_section_title" style="min-width:100px">Difficulty: </div>
+							<div class="prop_section_value" style="max-width:50px">
+								<%= @character.difficulty %>
 							</div>
 							<div style="clear:both"></div>
 						</div>
@@ -176,39 +208,128 @@
 						<div class="properties_section_heading">
 							Move Properties
 						</div>
-						<div class="properties_section_row">
-							<div class="properties_section_title">Safe Moves: </div><div class="prop_section_value">
-								<%= @character.moves.select{|m|m.on_block.to_i > -10}.count %>
-							</div>
-							<div style="clear:both"></div>
-							<div class="properties_section_title">Unsafe Moves: </div><div class="prop_section_value">
-								<%= @character.moves.select{|m|m.on_block.to_i <= -10}.count %>
-							</div>
-							<div style="clear:both"></div>
-						</div>
-						<div class="properties_section_row">
-							<div class="properties_section_title">High Moves: </div><div class="prop_section_value">
-								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["H","h","High","high"]).any?}.count %>
-							</div>
-							<div style="clear:both"></div>
-							<div class="properties_section_title">Mid Moves: </div><div class="prop_section_value">
-								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["M","m","Medium","medium", "Med", "med"]).any?}.count %>
-							</div>
-							<div style="clear:both"></div>
-							<div class="properties_section_title">Low Moves: </div><div class="prop_section_value">
-								<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["L","l","Low","low"]).any?}.count %>
-							</div>
-							<div style="clear:both"></div>
-						</div>
-						
-						<div class="properties_section_row">
-							<% Property.all.each do |prop| %>
-								<div class="properties_section_title"><%= prop.name %>: </div>
-								<div class="prop_section_value">
-									<%= @character.moves.select{|m|m.properties.select{|p|p.name == prop.name}.count>0}.count %>
+						<div class="properties_section_card_container">
+							<% all_moves = @character.moves %>
+							<% def display_property(title, value) %>
+
+								<div class="properties_prop_row">
+									<div class="properties_section_title"> 
+										<%= title %>
+									</div>
+									<div class="prop_section_value">
+										<%= value %>
+									</div>
+									<div class="clr"></div>
 								</div>
-								<div style="clear:both"></div>
+
 							<% end %>
+
+							<div class="properties_col">
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">General Information</div>
+									<% display_property("1 hit Moves:", 
+									all_moves.select{|m|m.extensions.count<=0&&m.parent.blank?}.count) %>
+									<% display_property("Strings:", all_moves.select{|m|!m.parent.blank?}.pluck(:id).count) %>
+									<% display_property("Jailing Strings:", all_moves.select{|m|m.parent.blank?&&m.jails_on_hit?}.pluck(:id).count) %>
+									<% display_property("Grabs:", all_moves.select{|m|m.is_grab?}.count) %>
+									<% display_property("Safe Moves(under -10):", all_moves.select{|m|m.on_block.to_i<-10}.count) %>
+									<% display_property("Unsafe Moves(under -15):", all_moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+									<% display_property("Launchable Moves(-15 +):", all_moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+								</div>
+
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">Lateral Movement</div>
+
+									<% display_property("Linear Moves:", all_moves.select{|m|m.extensions.count<=0}.count) %>
+									<% display_property("Right Tracking Moves:", all_moves.select{|m|m.parent.blank?}.count) %>
+									<% display_property("Left Tracking Moves:", all_moves.select{|m|m.parent.blank?}.count) %>
+									<% display_property("Homming Moves:", all_moves.select{|m|m.is_grab?}.count) %>
+								</div>
+
+							</div>
+
+							<div class="properties_col">
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">Stance Information</div>
+
+									<% display_property("Total Stances:", all_moves.select{|m|m.extensions.count<=0}.count) %>
+								</div>
+
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">On Block Frame</div>
+									<% def block_moves_between(min, max) %>
+
+									<% end %>
+									
+									<% display_property("Zero On Block", all_moves.select{|m|m.on_block.to_i==0}.count) %>
+									<% display_property("-1 to -6", all_moves.select{|m|m.on_block.to_i.between? -6, -1}.count) %>
+									<% display_property("-7 to -9", all_moves.select{|m|m.on_block.to_i.between? -9, -7}.count) %>
+									<% display_property("-10 to -12", all_moves.select{|m|m.on_block.to_i.between? -11, -10}.count) %>
+									<% display_property("-12 to -14", all_moves.select{|m|m.on_block.to_i.between? -14, -12}.count) %>
+									<% display_property("-15 to -19", all_moves.select{|m|m.on_block.to_i.between? -20, -15}.count) %>
+									<% display_property("-20 or under", all_moves.select{|m|m.on_block.to_i<=-20}.count) %>
+								</div>
+							</div>
+
+
+							<div class="properties_col">
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">Starup Frame</div>
+									<% def block_moves_between(min, max) %>
+
+									<% end %>
+									
+									<% display_property("i10", all_moves.select{|m|m.startup.to_i<=10}.count) %>
+									<% display_property("i11", all_moves.select{|m|m.startup.to_i==11}.count) %>
+									<% display_property("i12", all_moves.select{|m|m.startup.to_i==12}.count) %>
+									<% display_property("i13", all_moves.select{|m|m.startup.to_i==13}.count) %>
+									<% display_property("i14", all_moves.select{|m|m.startup.to_i==14}.count) %>
+									<% display_property("i15+", all_moves.select{|m|m.startup.to_i>=15}.count) %>
+								</div>
+
+								<div class="properties_section_card">
+									
+
+									<div class="properties_section_main_title">Offensive Moves</div>
+									
+									
+									<% display_property("Launchers:", @character.moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+									<% display_property("CH Launchers:", @character.moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+									<% display_property("CH String:", @character.moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+									<% display_property("Knockdown moves:", @character.moves.select{|m|m.extensions.count>0&&m.parent.blank?}.count) %>
+								</div>
+							</div>
+
+							<div class="properties_col">
+								
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">Hit Levels</div>
+									<div class="properties_section_title">High Moves: </div><div class="prop_section_value">
+										<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["H","h","High","high"]).any?}.count %>
+									</div>
+									<div style="clear:both"></div>
+									<div class="properties_section_title">Mid Moves: </div><div class="prop_section_value">
+										<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["M","m","Medium","medium", "Med", "med"]).any?}.count %>
+									</div>
+									<div style="clear:both"></div>
+									<div class="properties_section_title">Low Moves: </div><div class="prop_section_value">
+										<%= @character.moves.select{|m|!m.jails_on_block? and ((m.hit_level.nil? ? "" : m.hit_level ).split(",") & ["L","l","Low","low"]).any?}.count %>
+									</div>
+									<div style="clear:both"></div>
+								</div>
+								
+								<div class="properties_section_card">
+									<div class="properties_section_main_title">Move Properties</div>
+									<% Property.all.each do |prop| %>
+										<div class="properties_section_title"><%= prop.name %>: </div>
+										<div class="prop_section_value">
+											<%= @character.moves.select{|m|m.properties.select{|p|p.name == prop.name}.count>0}.count %>
+										</div>
+										<div style="clear:both"></div>
+									<% end %>
+								</div>
+							</div>
+							<div class="clr"></div>
 						</div>
 					</div>
 				</div>

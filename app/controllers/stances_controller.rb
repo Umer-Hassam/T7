@@ -76,7 +76,6 @@ class StancesController < ApplicationController
     end
     
     redirect_to @stance.character
-    
   end
 
   def backup_all_moves
@@ -86,43 +85,43 @@ class StancesController < ApplicationController
 
   def save_move_from_dict(move_dict, parent_move)
 
-    @move = @stance.moves.where(:input => move_dict["input"]).select{ |m| move_dict["parent"].blank? ? m.parent == nil : (m.parent == nil ? false : m.parent.input == move_dict["parent"])}.first
+    move = @stance.moves.where(:input => move_dict["input"]).select{ |m| move_dict["parent"].blank? ? m.parent == nil : (m.parent == nil ? false : m.parent.input == move_dict["parent"])}.first
       
-      if @move == nil
-        @move = @stance.moves.create()
+      if move == nil
+        move = @stance.moves.create()
       end
 
-      @move.name = move_dict["name"].blank? ? @move.name : move_dict["name"]
+      move.name = move_dict["name"].blank? ? move.name : move_dict["name"]
 
-      @move.input     = move_dict["input"] 
-      @move.hit_level = move_dict["hit_level"].blank? ? @move.hit_level : move_dict["hit_level"]
-
-      
-      @move.cancel_input = move_dict["cancel_input"].blank? ? @move.cancel_input : move_dict["cancel_input"]
+      move.input     = move_dict["input"] 
+      move.hit_level = move_dict["hit_level"].blank? ? move.hit_level : move_dict["hit_level"]
 
       
-      @move.startup = move_dict["startup"].blank? ? @move.startup : move_dict["startup"]
-      @move.on_block = move_dict["on_block"].blank? ? @move.on_block : move_dict["on_block"]
-      @move.on_hit = move_dict["on_hit"].blank? ? @move.on_hit : move_dict["on_hit"]
-      @move.on_counter_hit = move_dict["on_counter_hit"].blank? ? @move.on_counter_hit : move_dict["on_counter_hit"]
+      move.cancel_input = move_dict["cancel_input"].blank? ? move.cancel_input : move_dict["cancel_input"]
 
       
-      @move.hit_damage = move_dict["hit_damage"].blank? ? @move.hit_damage : move_dict["hit_damage"]
-      @move.conter_hit_damage = move_dict["conter_hit_damage"].blank? ? @move.conter_hit_damage : move_dict["conter_hit_damage"]
+      move.startup = move_dict["startup"].blank? ? move.startup : move_dict["startup"]
+      move.on_block = move_dict["on_block"].blank? ? move.on_block : move_dict["on_block"]
+      move.on_hit = move_dict["on_hit"].blank? ? move.on_hit : move_dict["on_hit"]
+      move.on_counter_hit = move_dict["on_counter_hit"].blank? ? move.on_counter_hit : move_dict["on_counter_hit"]
+
+      
+      move.hit_damage = move_dict["hit_damage"].blank? ? move.hit_damage : move_dict["hit_damage"]
+      move.conter_hit_damage = move_dict["conter_hit_damage"].blank? ? move.conter_hit_damage : move_dict["conter_hit_damage"]
       
        
-      @move.counter = move_dict["counter"].blank? ? @move.counter : move_dict["counter"]
+      move.counter = move_dict["counter"].blank? ? move.counter : move_dict["counter"]
 
       # ADDING RELATIONSHIPS
 
-      @move.character = @stance.character
+      move.character = @stance.character
       
       #:move_purpose => MovePurpose.where('lower(name) = ?', bb["move_purpose"][0].downcase).first,
       if !move_dict["move_purpose"].blank?
         move_dict["move_purpose"].each do |purpose|
           purp = Purpose.where('lower(name) = ?', purpose.downcase).first
           if !purp.blank?
-            @move.purposes << purp
+            move.purposes << purp
           end
         end
       end
@@ -132,7 +131,7 @@ class StancesController < ApplicationController
         move_dict["properties"].each do |property|
           prop = Property.where('lower(name) = ?', property.downcase).first
           if !prop.blank?
-            @move.properties << prop
+            move.properties << prop
           end
         end
       end
@@ -142,7 +141,7 @@ class StancesController < ApplicationController
         move_dict["effects_hit"].each do |item|
           val = MoveEffect.where('lower(name) = ?', item.downcase).first
           if !val.blank?
-            @move.effects_hit << val
+            move.effects_hit << val
           end
         end
       end
@@ -151,7 +150,7 @@ class StancesController < ApplicationController
         move_dict["effects_counter_hit"].each do |item|
           val = MoveEffect.where('lower(name) = ?', item.downcase).first
           if !val.blank?
-            @move.effects_counter_hit << val
+            move.effects_counter_hit << val
           end
         end
       end
@@ -160,25 +159,25 @@ class StancesController < ApplicationController
         move_dict["effects_block"].each do |item|
           val = MoveEffect.where('lower(name) = ?', item.downcase).first
           if !val.blank?
-            @move.effects_block << val
+            move.effects_block << val
           end
         end
       end
 
       #Set parent move
       if !parent_move.blank?
-        @move.parent = parent_move
+        move.parent = parent_move
       end
       
-      if @move.save
+      if move.save
         if !move_dict["child_moves"].blank?
 
           move_dict["child_moves"].each do |cm|
-            save_move_from_dict(cm, @move)
+            save_move_from_dict(cm, move)
           end
         end
 
-        return @move
+        return move
       end
   end
 

@@ -6,7 +6,7 @@
 	<div class="page_title">Choose Your Character</div>
 
 	<div class="character_filter_options">
-		<input type="text" id="search_box" onkeyup="myFunction()" placeholder="Search names or input" class="filter_text_field">
+		<input type="text" id="search_box" onkeyup="myFunction()" placeholder="Search names or archetype" class="filter_text_field">
 		<%if false %>
 		<%= select_tag("sort_select", options_for_select(["Sort by Name","Sort by Tier","Sort by Archetype","Sort by Difficulty"]), :class=>"filter_select" ) %>
 		<% end %>
@@ -23,10 +23,7 @@
 
 	<div class="characters_container">
 		
-		<% @characters.sort_by{ |c| c.name }.each do |character| %>
-			<% if !user_signed_in? && character.publish.to_i == -1 %>
-				<% next %>
-			<% end %>
+		<% @characters.each do |character| %>
 			<div class="character_card"
 			<% if character.publish.to_i == -1 %> 
 			style="border: 2px solid red;" 
@@ -74,10 +71,10 @@
 				<div class="character_info_div">
 					<div class="info_col">
 						<div class="info_col_value">
-							<%= character.moves.count %>
+							<%= character.movement %>
 						</div>
 						<div class="info_col_title">
-							No of Moves
+							Movement
 						</div>
 					</div>
 					<div class="info_col">
@@ -122,17 +119,21 @@
 		filter = input.value.toUpperCase();
 		
 		var parent_div = $('.characters_container:visible')[0]
-		move_div = $(parent_div).find(".name_value_div")
+		move_div = $(parent_div).find(".name_value_div");
+		arc_div = $(parent_div).find(".archtype_div");
 
 		// Loop through all list items, and hide those who don't match the search query
 		for (i = 0; i < move_div.length; i++) {
 			
-			txtValue = move_div[i].textContent || move_div[i].innerText;
-			
+			nameValue = move_div[i].textContent || move_div[i].innerText;
+			archValue = arc_div[i].textContent || arc_div[i].innerText;
+			console.log(" + " + archValue);
 			inputValue = $(move_div[i])//.parentElement.parentElement.attr('input');
 			iv = inputValue.text();//inputValue[0].parentElement.parentElement).attr('input')
 			
-			if (txtValue.toUpperCase().indexOf(filter) > -1 || iv.toUpperCase().startsWith(filter)) {
+			if (nameValue.toUpperCase().indexOf(filter) > -1 || iv.toUpperCase().startsWith(filter) ||
+				archValue.toUpperCase().indexOf(filter) > -1
+				) {
 				
 				move_div[i].parentElement.parentElement.style.display = "block";
 				$(move_div[i].parentElement.parentElement).css('padding-left','0px');

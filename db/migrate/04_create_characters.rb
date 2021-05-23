@@ -13,6 +13,7 @@ class CreateCharacters < ActiveRecord::Migration[6.0]
       t.text :gameplay
       t.text :strengths
       t.text :weaknesses
+      t.string :movement
 
       t.timestamps
     end

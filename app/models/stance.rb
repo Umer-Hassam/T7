@@ -9,10 +9,18 @@ class Stance < ApplicationRecord
   def destroy_associated_moves
     self.moves.destroy_all
   end
-
+  
   def parent_moves
     Move.sort_by_priority_array(moves.select {|move| move.parent == nil }.to_a, Move.input_priority_array)
+    #arr = moves.select {|move| move.parent == nil }
+    
+    #arr.each_with_index do |i, m|
+    #  print "-------------------------------------------------- " + m.to_s + " --->" + i.input + "\n"
+    #end
+    #arr.sort_by{ |move| Move.input_priority_array.index(move.input) }
+      
   end
+
   def child_moves
     Move.sort_by_priority_array(moves.select {|move| move.extensions.count <= 0 || !move.cancel_input.blank?}.to_a, Move.input_priority_array)
   end
@@ -20,18 +28,38 @@ class Stance < ApplicationRecord
     # get all parent moves that have same frame startup as provided
     # go through each extension and if any jails add them to the final array else add the parent move
     #moves.select{ |move| move.starup.to_i == startup.to_i }.each do |move| {}
-    final_moves = []
-    parent_moves.select{ |move| move.startup.to_i == startup.to_i }.each do |move|
-      jailing_extensions = move.all_jailing_extensions
-      if jailing_extensions.count > 0
-        final_moves.concat jailing_extensions
-      else
-        final_moves << move
-      end
-    end
     
-    # Finally we need to extract the moves with highest damage and highest frames
-    return final_moves#[final_moves.sort_by { |move| move.total_damage_on_hit }.last, final_moves.sort_by { |move| move.on_hit }.last]
+    arr = moves.select{ |move| move.true_hit_startup.to_i == startup.to_i }.sort_by { |m| m.total_damage_on_hit }
+    final_array = []
+    if arr.count > 0 
+      max_dmg_move = arr.first
+      arr.each do |move|
+        if move.launches_on_hit? || move.is_punisher?
+          final_array << move
+        elsif move.total_damage_on_hit > max_dmg_move.total_damage_on_hit
+          max_dmg_move = move
+        end
+      end
+
+      final_array << max_dmg_move
+
+      return final_array
+    else
+      return []
+    end
+    #launches_on_hit
+    # final_moves = []
+    # parent_moves.select{ |move| move.startup.to_i == startup.to_i }.each do |move|
+    #   jailing_extensions = move.all_jailing_extensions
+    #   if jailing_extensions.count > 0
+    #     final_moves.concat jailing_extensions
+    #   else
+    #     final_moves << move
+    #   end
+    # end
+    
+    # # Finally we need to extract the moves with highest damage and highest frames
+    # return [final_moves.sort_by { |m| m.total_damage_on_hit }.first, final_moves.sort_by { |m| m.is_punisher? }]#[final_moves.sort_by { |move| move.total_damage_on_hit }.last, final_moves.sort_by { |move| move.on_hit }.last]
   end
   
   def moves_sorted_by_input

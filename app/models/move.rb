@@ -4,18 +4,22 @@ class Move < ApplicationRecord
   before_destroy :destroy_extensions
 
   private def custom_validation
+
     if !self.parent.blank?
-      if (self.parent.extensions.select { |m| m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input}.count > 0 )
+      if (self.parent.extensions.select { |m| m.id != self.id && m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input && m.parent_id == self.parent_id}.count > 0 )
+        byebug
         self.errors[:base] << "Another Extensions of this moves parent already has the same input and the cancel input. This is not allowed"
       end
 
       if self.parent.stance_id != self.stance_id
+        byebug
         self.errors[:base] << "Stance must be the same as parent move. Parent's Stance: #{self.parent.stance.name}"
       end
 
     else
       
-      if (self.stance.moves.select { |m| m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input}.count > 0 )
+      if (self.stance.moves.select { |m| m.persisted? && m.input == self.input && m.cancel_input == self.cancel_input && m.parent_id == self.parent_id}.count > 0 )
+        byebug
         self.errors[:base] << "Another move already has the same input and the cancel input. This is not allowed."
       end
     end
@@ -94,7 +98,7 @@ class Move < ApplicationRecord
     end
     return inputArray
   end
-  
+
   # This method returns true if the move jails all the way to the parent move, some moves can jail after the first hit
   def true_jails_on_hit? 
     true_jails = true
@@ -111,6 +115,18 @@ class Move < ApplicationRecord
       em = em.parent
     end
     return true_jails
+  end
+
+  def true_hit_startup 
+    if self.parent.blank?
+      return startup
+    else
+      m = self
+      while m.jails_on_hit?
+        m = m.parent
+      end
+      return m.startup
+    end
   end
   
   def total_damage_on_hit
@@ -159,6 +175,14 @@ class Move < ApplicationRecord
   
   def is_grab?
     return properties.select { |prop| prop.name == "Grab" }.count > 0
+  end
+
+  def is_punisher?
+    return purposes.select { |prop| prop.name == "Punisher" }.count > 0
+  end
+
+  def launches_on_hit?
+    return effects_hit.select { |eff| (eff.name == "Launch" || eff.name == "Launch Screwed") }.count > 0
   end
   
   def hit_effects_presentable_strings
@@ -219,7 +243,7 @@ class Move < ApplicationRecord
     
     array_length = arr_temp.size
     return array_to_sort if array_length <= 1
-    print array_to_sort
+    
     loop do
       # we need to create a variable that will be checked so that we don't run into an infinite loop scenario.
       swapped = false
@@ -262,7 +286,7 @@ class Move < ApplicationRecord
   end
   
   def backup_dict()
-    
+
     dict = {
       :input => input, 
       :name => name,

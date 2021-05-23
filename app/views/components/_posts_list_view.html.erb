@@ -8,12 +8,8 @@
 		<% posts = character.posts.where(post_type: post_type) %>
 	<% end %>
 	
-	<% if user_signed_in? %>
-	<div class="options_container" style="float:right;padding:20px 30px">
-		<%= link_to "Create New Post", new_post_url(:character_id=>character.id, :post_type=>post_type), {:class=>"button"} %>
-	</div>
-	<% end %>
-	
+	<%= link_to "New Post", new_post_url(:post_type=>post_type) %>
+
 	<% posts.each do |post| %>
 	<% if defined?(display_type) && display_type == "mini" %>
 	

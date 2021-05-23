@@ -109,12 +109,13 @@
     <%= form.text_area :details, {:id=>"text_area",:style=>"margin: 0px;width: 600px;height: 150px;"}%>
   </div>
 
+  	<% if !params[:post_type].blank? && params[:post_type] != "G0" %>
+		<div class="field">
+			Character: <%= form.select :character_id, options_from_collection_for_select(Character.all, 'id', 'name', params[:char_id]) %>
+		</div>
+	<% end %>
 	<div class="field">
-		Character: <%= form.select :character_id, options_from_collection_for_select(Character.all, 'id', 'name', params[:char_id]) %>
-	</div>
-	
-	<div class="field">
-		Type: <%= form.text_field :post_type, { :value => @post.persisted? ? @post.post_type : params[:post_type] } %>
+		<%= form.hidden_field :post_type, { :value => @post.persisted? ? @post.post_type : params[:post_type] } %>
 	</div>
 	
   <div class="field">

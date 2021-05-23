@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "block_effects", force: :cascade do |t|
     t.integer "move_id"
     t.integer "move_effect_id"
@@ -30,6 +33,9 @@ ActiveRecord::Schema.define(version: 20) do
     t.string "tier"
     t.string "publish"
     t.text "gameplay"
+    t.text "strengths"
+    t.text "weaknesses"
+    t.string "movement"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -122,8 +128,9 @@ ActiveRecord::Schema.define(version: 20) do
     t.string "hit_level"
     t.string "type"
     t.text "counter"
+    t.text "explaination"
     t.integer "character_id"
-    t.integer "parent_id"
+    t.bigint "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "stance_id"

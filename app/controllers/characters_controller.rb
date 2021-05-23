@@ -12,7 +12,27 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.all
+
+    if !user_signed_in?
+      @characters = Character.where.not(publish:"-1")
+    else
+      @characters = Character.all
+    end
+
+    if !params[:sort].blank?
+      
+      if params[:sort] == "tier"
+        @characters = @characters.sort_by{ |c| ["S++", "S+", "S","A", "B", "C"].index(c.tier) }
+      elsif params[:sort] == "diff"
+        @characters = @characters.sort_by{ |c| ["5/5", "4/5", "3/5","2/5", "1/5"].index(c.difficulty) }
+      else
+        @characters = @characters.sort_by{ |c| c.name }
+      end
+
+    else
+      @characters = @characters.sort_by{ |c| c.name }
+    end
+    
   end
 
   # GET /characters/1
@@ -117,6 +137,6 @@ class CharactersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def character_params
-      params.require(:character).permit(:name, :wiki_link, :full_image_link, :thumb_image_link, :gameplay, :fighting_style, :archetype, :difficulty, :tier, :publish)
+      params.require(:character).permit(:name, :wiki_link, :full_image_link, :thumb_image_link, :gameplay, :fighting_style, :archetype, :difficulty, :tier, :publish, :strengths, :weaknesses, :movement)
     end
 end
